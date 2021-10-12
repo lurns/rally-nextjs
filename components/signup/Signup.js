@@ -1,4 +1,25 @@
-const Signup = () => {
+import router from "next/router";
+import { useRef } from "react";
+
+const Signup = (props) => {
+    const nicknameRef = useRef();
+    const emailRef = useRef();
+    const passRef = useRef();
+    const confirmPassRef = useRef();
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+
+        const userData = {
+            nickname: nicknameRef.current.value,
+            email: emailRef.current.value,
+            password: passRef.current.value,
+            confirmPassword: confirmPassRef.current.value
+        }
+
+        props.onNewUser(userData)
+    }
+
 
     return (
         <div className="h-screen bg-blue-200 p-10">
@@ -10,7 +31,7 @@ const Signup = () => {
             <h3 className="mt-3 text-left font-medium italic text-3xl text-gray-300">
                 It&apos;s gonna be great!
             </h3>
-            <form id="rallySignup" className="mt-10">
+            <form id="rallySignup" className="mt-10" onSubmit={submitHandler}>
             <div className="flex flex-col mb-3">
                 <label 
                         htmlFor="rallyNick"
@@ -22,6 +43,7 @@ const Signup = () => {
                         name="rallyNick"
                         id="rallyNick"
                         className="border-gray-300"
+                        ref={nicknameRef}
                         required
                     />
                 </div>
@@ -36,6 +58,7 @@ const Signup = () => {
                         name="rallyEmail"
                         id="rallyEmail"
                         className="border-gray-300"
+                        ref={emailRef}
                         required
                     />
                 </div>
@@ -50,6 +73,7 @@ const Signup = () => {
                         name="rallyPass"
                         id="rallyPass"
                         className="border-gray-300"
+                        ref={passRef}
                         required
                     />
                 </div>
@@ -64,6 +88,7 @@ const Signup = () => {
                         name="confirmRallyPass"
                         id="confirmRallyPass"
                         className="border-gray-300"
+                        ref={confirmPassRef}
                         required
                     />
                 </div>

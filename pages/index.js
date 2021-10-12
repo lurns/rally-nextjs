@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import Image from 'next/image'
 
-export const Home = () => {
+import Home from '../components/home/Home';
+
+export const HomePage = () => {
   return (
-    <div>
-      nunya
-    </div>
+    <Home />
   )
 }
 
-export default Home;
+export default HomePage;
