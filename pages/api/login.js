@@ -12,19 +12,21 @@ const handler = async (req, res) => {
             const usersCollection = db.collection('users');
 			const userDb = await usersCollection.findOne({"user.email":req.body.email})
 
-			console.log('retrieved ' + JSON.stringify(userDb));
-
+			client.close();
 
 			// if user found, compare
 			if (userDb) {
-				console.log(userDb.user.password);
 				var result = await bcrypt.compare(req.body.password, userDb.user.password);
-				console.log('the verdict' + result);
+				
+				// create session
+				if (result) {
+					await res.status(201).json({message: 'user found'});
+				}
 			}
 
-			client.close();
+			// give err
+			await res.status(403).json({error: 'User not found.'});
 
-            await res.status(201).json({message: 'user found'});
             
         } catch (e) {
             console.log('error', e);

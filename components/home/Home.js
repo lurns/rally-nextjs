@@ -1,9 +1,11 @@
 import LoginForm from '../../components/login/LoginForm';
 import { useRouter } from "next/router";
+import {useState} from 'react';
 
 const Home = () => {
-    // handle sending data to api/signup
+    // handle sending data to api/login
     const router = useRouter();
+    const [error, setError] = useState(false);
 
     const loginHandler = async (userData) => {
         const response = await fetch('/api/login', {
@@ -15,8 +17,14 @@ const Home = () => {
         });
 
         const data = await response.json();
-        console.log(data);
-        router.push('/dash');
+        console.log(data)
+
+        if (!data.error) {
+            router.push('/dash');  
+        } else {
+            setError(true);
+        }
+
     }
     return (
         <div className="flex h-screen bg-white">
@@ -25,7 +33,7 @@ const Home = () => {
                     Image here
                 </div>
                 <div className="flex-1">
-                    <LoginForm onLogin={loginHandler} />
+                    <LoginForm onLogin={loginHandler} error={error}/>
                 </div>
             </div>
         </div>

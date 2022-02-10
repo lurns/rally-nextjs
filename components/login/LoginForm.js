@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import ErrorMessage from '../../components/ui/ErrorMessage';
 
 const LoginForm = (props) => {
     const emailRef = useRef();
@@ -23,6 +24,7 @@ const LoginForm = (props) => {
             <h3 className="mt-3 text-left font-medium italic text-3xl text-slate-100">
                 Or else.
             </h3>
+            {props.error ? <ErrorMessage message="User not found. Sign up?" /> : ''}
             <form id="rallyLogin" className="mt-10" onSubmit={submitHandler}>
                 <div className="flex flex-col mb-3">
                 <label 
