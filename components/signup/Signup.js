@@ -1,4 +1,3 @@
-import router from "next/router";
 import { useRef } from "react";
 
 const Signup = (props) => {
@@ -28,21 +27,21 @@ const Signup = (props) => {
             <h2 className="text-left font-black text-6xl text-purple-500">
                 Sign up
             </h2>
-            <h3 className="mt-3 text-left font-medium italic text-3xl text-gray-300">
+            <h3 className="mt-3 text-left font-medium italic text-3xl text-slate-300">
                 It&apos;s gonna be great!
             </h3>
             <form id="rallySignup" className="mt-10" onSubmit={submitHandler}>
             <div className="flex flex-col mb-3">
                 <label 
                         htmlFor="rallyNick"
-                        className="text-left text-gray-500"
+                        className="text-left text-slate-500"
                     >Nickname
                     </label>
                     <input 
                         type="text"
                         name="rallyNick"
                         id="rallyNick"
-                        className="border-gray-300"
+                        className="border-slate-300"
                         ref={nicknameRef}
                         required
                     />
@@ -50,14 +49,14 @@ const Signup = (props) => {
                 <div className="flex flex-col mb-3">
                 <label 
                         htmlFor="rallyEmail"
-                        className="text-left text-gray-500"
+                        className="text-left text-slate-500"
                     >Email
                     </label>
                     <input 
                         type="email"
                         name="rallyEmail"
                         id="rallyEmail"
-                        className="border-gray-300"
+                        className="border-slate-300"
                         ref={emailRef}
                         required
                     />
@@ -65,14 +64,14 @@ const Signup = (props) => {
                 <div className="flex flex-col mb-3">
                     <label 
                         htmlFor="rallyPass"
-                        className="text-left text-gray-500"
+                        className="text-left text-slate-500"
                     >Password
                     </label>
                     <input
                         type="password"
                         name="rallyPass"
                         id="rallyPass"
-                        className="border-gray-300"
+                        className="border-slate-300"
                         ref={passRef}
                         required
                     />
@@ -80,14 +79,14 @@ const Signup = (props) => {
                 <div className="flex flex-col mb-3">
                     <label 
                         htmlFor="confirmRallyPass"
-                        className="text-left text-gray-500"
+                        className="text-left text-slate-500"
                     >Confirm Password
                     </label>
                     <input
                         type="password"
                         name="confirmRallyPass"
                         id="confirmRallyPass"
-                        className="border-gray-300"
+                        className="border-slate-300"
                         ref={confirmPassRef}
                         required
                     />
