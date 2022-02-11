@@ -1,7 +1,11 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
+import { withIronSessionApiRoute } from 'iron-session/next';
+import { ironOptions } from '../../lib/config';
 
-const handler = async (req, res) => {
+export default withIronSessionApiRoute(handler, ironOptions);
+
+async function handler (req, res) {
     if (req.method === 'POST' && req.body.password && req.body.email) {
         // make sure user matches in db
         try {
@@ -20,6 +24,12 @@ const handler = async (req, res) => {
 				
 				// create session
 				if (result) {
+					req.session.user = {
+						id: userDb._id,
+					}
+
+					await req.session.save();
+					console.log(req.session);
 					await res.status(201).json({message: 'user found'});
 				}
 			}
@@ -35,5 +45,3 @@ const handler = async (req, res) => {
     }
 
 }
-
-export default handler;
