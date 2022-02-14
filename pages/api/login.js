@@ -29,19 +29,16 @@ async function handler (req, res) {
 					}
 
 					await req.session.save();
-					console.log(req.session);
-					await res.status(201).json({message: 'user found'});
+					// console.log(req.session);
+					await res.json(req.session.user);
 				}
 			}
 
 			// give err
 			await res.status(403).json({error: 'User not found.'});
-
             
         } catch (e) {
-            console.log('error', e);
+            console.log('error ', e);
         }
-
-    }
-
+    } 
 }

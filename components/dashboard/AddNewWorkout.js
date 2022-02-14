@@ -22,7 +22,7 @@ const AddNewWorkout = () => {
 	}
 
 	return (
-		<div className="">
+		<div className={classes}>
 			<h3 className="font-black text-3xl text-sky-900">
 				Add New Workout
 			</h3>
@@ -80,9 +80,22 @@ const AddNewWorkout = () => {
 
 				
 			<div className="flex flex-col mb-3">
-				<button 
+				<button id="submitWorkoutButton"
 					type="submit" 
-					className="min-w-full mt-5 p-4 bg-sky-900 font-bold text-white rounded-2xl shadow-lg"
+					className="
+						min-w-full 
+						mt-5 
+						p-4 
+						bg-sky-900 
+						transition 
+						ease-in-out 
+						delay-150 
+						hover:bg-blue-500 
+						font-bold 
+						text-white 
+						rounded-2xl 
+						shadow-lg
+					"
 				>
 					Add New Workout
 				</button>

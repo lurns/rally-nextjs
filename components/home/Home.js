@@ -1,11 +1,13 @@
 import LoginForm from '../../components/login/LoginForm';
 import { useRouter } from "next/router";
 import {useState} from 'react';
+import { useAuth } from "../../store/auth-context";
 
 const Home = () => {
     // handle sending data to api/login
     const router = useRouter();
     const [error, setError] = useState(false);
+    const { auth } = useAuth();
 
     const loginHandler = async (userData) => {
         const response = await fetch('/api/login', {
@@ -17,7 +19,7 @@ const Home = () => {
         });
 
         const data = await response.json();
-        console.log(data)
+        console.log(data);
 
         if (!data.error) {
             router.push('/dash');  
