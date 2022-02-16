@@ -1,19 +1,41 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import classes from './DashHome.module.css';
+import { useAuth } from "../../store/auth-context";
+import ErrorMessage from '../../components/ui/ErrorMessage';
+import { useRouter } from "next/router";
 
 const AddNewWorkout = () => {
+	const [error, setError] = useState(false);
+	const { auth } = useAuth();
+	const router = useRouter();
     const workoutTypeRef = useRef();
     const workoutDurationRef = useRef();
 
-    const submitWorkoutHandler = (event) => {
+    const submitWorkoutHandler = async (event) => {
         event.preventDefault();
 
         const workoutData = {
             workout_type: workoutTypeRef.current.value,
             duration: workoutDurationRef.current.value,
+			user_id: auth.user._id,
         }
 
-        props.onAddNewWorkout(workoutData)
+		const response = await fetch('/api/new-workout', {
+			method: 'POST',
+			body: JSON.stringify(workoutData),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+			});
+	
+			const data = await response.json();
+			console.log(data);
+	
+			if (!data.error) {
+				router.push('/dash');  
+			} else {
+				setError(true);
+			}
     }
 
 	const displayWorkoutDuration = () => {
@@ -26,8 +48,7 @@ const AddNewWorkout = () => {
 			<h3 className="font-black text-3xl text-sky-900">
 				Add New Workout
 			</h3>
-			<p>inputs needed: type of workout and duration (in min)</p>
-			
+			{error ? <ErrorMessage message="Error adding workout" /> : ''}
 			<form id="addNewWorkoutForm" className="mt-5" onSubmit={submitWorkoutHandler}>
 			<div className="flex flex-col mb-3">
 				<label 
@@ -70,6 +91,7 @@ const AddNewWorkout = () => {
 						onChange={displayWorkoutDuration}
 						min="1"
 						max="90"
+						defaultValue="1"
 						required
 					/>
 					<output id="rangeDuration" className="font-black text-1xl pt-5 text-sky-700">
