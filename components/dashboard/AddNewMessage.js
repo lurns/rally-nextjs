@@ -1,9 +1,111 @@
+import { useRef, useState } from "react";
+import classes from './DashHome.module.css';
+import { useAuth } from "../../store/auth-context";
+import ErrorMessage from '../../components/ui/ErrorMessage';
+import { useRouter } from "next/router";
+
 const AddNewMessage = () => {
-  return (
-    <div>
-      <p>block to add new motivational message</p>
-      <p>inputs needed: message text, message type (on track, could be better, get your butt out there etc)</p>
-    </div>
+	const [error, setError] = useState(false);
+	const { auth, user, setUser } = useAuth();
+	const router = useRouter();
+    const messageBodyRef = useRef();
+    const messageTypeRef = useRef();
+
+    const submitMessageHandler = async (event) => {
+        event.preventDefault();
+
+		// TODO: error handling
+
+        const messageData = {
+            message_body: messageBodyRef.current.value,
+            message_type: messageTypeRef.current.value,
+			user_id: auth.user._id,
+        }
+
+		const response = await fetch('/api/new-message', {
+			method: 'POST',
+			body: JSON.stringify(messageData),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+			});
+	
+			const data = await response.json();
+			console.log(data);
+	
+			if (!data.error) {
+				router.push('/dash');  
+			} else {
+				setError(true);
+			}
+    }
+
+  	return (
+		<div className={classes}>
+			<h3 className="font-black text-3xl text-sky-900">
+				Add New Message
+			</h3>
+			{error ? <ErrorMessage message="Error adding workout" /> : ''}
+			<form id="addNewMessageForm" className="mt-5" onSubmit={submitMessageHandler}>
+			<div className="flex flex-col mb-3">
+				<label 
+					htmlFor="messageType"
+					className="text-left text-slate-500"
+				>Message Type
+				</label>
+				<select 
+					name="messageType"
+					id="messageType"
+					className="border-slate-300 form-select"
+					ref={messageTypeRef}
+					required
+				>
+					<option>On track</option>
+					<option>Motivational</option>
+					<option>Could be better...</option>
+					<option>Get out there!</option>
+				</select>
+			</div>
+			<div className="flex flex-col mb-3">
+				<label 
+					htmlFor="messageBody"
+					className="text-left text-slate-500"
+				>Message Body
+				</label>
+				<textarea
+					name="messageBody"
+					id="messageBody"
+					className="border-slate-300 form-textarea resize-none"
+					ref={messageBodyRef}
+					placeholder="Be gentle..."
+					maxLength="300"
+					required
+				/>
+			</div>
+			<div className="flex flex-col mb-3">
+				<button id="submitMessageButton"
+					type="submit" 
+					className="
+						min-w-full 
+						mt-5 
+						p-4 
+						bg-sky-900 
+						transition 
+						ease-in-out 
+						delay-150 
+						hover:bg-blue-500 
+						font-bold 
+						text-white 
+						rounded-2xl 
+						shadow-lg
+					"
+				>
+					Add New Message
+				</button>
+			</div>
+
+			</form>
+	</div>
   )
 }
 

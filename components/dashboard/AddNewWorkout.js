@@ -6,13 +6,15 @@ import { useRouter } from "next/router";
 
 const AddNewWorkout = () => {
 	const [error, setError] = useState(false);
-	const { auth } = useAuth();
+	const { auth, user, setUser } = useAuth();
 	const router = useRouter();
     const workoutTypeRef = useRef();
     const workoutDurationRef = useRef();
 
     const submitWorkoutHandler = async (event) => {
         event.preventDefault();
+
+		// TODO: error handling
 
         const workoutData = {
             workout_type: workoutTypeRef.current.value,
