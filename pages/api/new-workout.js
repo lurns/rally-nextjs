@@ -13,7 +13,7 @@ async function handler (req, res) {
 			const workout = {
 				workout_type: req.body.workout_type,
 				duration: req.body.duration,
-				user_id: req.body.user_id,
+				user_id: req.body.user_id, // or req.session
 				date: date,
 			}
 

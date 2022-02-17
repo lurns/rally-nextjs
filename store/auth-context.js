@@ -1,13 +1,23 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
 export const getUser = async() => {
 	try {
-		const response = await fetch('api/auth', {
-			method: 'GET',
-		});
-		const user = await response.json();
+		// see if user in localstorage
+		let user;
+
+		if (localStorage.getItem('rally_storage')) {
+			user = localStorage.getItem('rally_storage');
+		} else {
+			const response = await fetch('api/auth', {
+				method: 'GET',
+			});
+
+			user = await response.json();
+
+			localStorage.setItem('rally_storage', JSON.stringify(user));
+		}
 
 		if (user) {
 			return { status: 'SIGNED_IN', user: user };
@@ -21,9 +31,17 @@ export const getUser = async() => {
 }
 
 export const AuthProvider = (props) => {
-	const auth = props.myAuth || {status: 'SIGNED_OUT', user: null};
+	const [user, setUser] = useState();
+	const auth = props.myAuth || { status: 'SIGNED_OUT', user: null };
 
-	return <AuthContext.Provider value={{ auth }}>{props.children}</AuthContext.Provider>
+	if (auth.user) {
+		console.log(auth.user);
+		setUser(auth.user);
+		console.log('user set');
+		console.log(user)
+	}
+
+	return <AuthContext.Provider value={{ auth, user, setUser }}>{props.children}</AuthContext.Provider>
 }
 
 export const useAuth = () => useContext(AuthContext);
