@@ -2,10 +2,14 @@ import { useRef, useState } from "react";
 import classes from './DashHome.module.css';
 import { useAuth } from "../../store/auth-context";
 import ErrorMessage from '../../components/ui/ErrorMessage';
+import SuccessMessage from "../ui/SuccessMessage";
 import { useRouter } from "next/router";
 
 const AddNewMessage = () => {
 	const [error, setError] = useState(false);
+	const [success, setSuccess] = useState(false);
+	const [loading, setLoading] = useState(false);
+
 	const { auth, user, setUser } = useAuth();
 	const router = useRouter();
     const messageBodyRef = useRef();
@@ -13,13 +17,14 @@ const AddNewMessage = () => {
 
     const submitMessageHandler = async (event) => {
         event.preventDefault();
+		setLoading(true);
 
 		// TODO: error handling
 
         const messageData = {
             message_body: messageBodyRef.current.value,
             message_type: messageTypeRef.current.value,
-			user_id: auth.user._id,
+			user_id: user._id,
         }
 
 		const response = await fetch('/api/new-message', {
@@ -34,8 +39,13 @@ const AddNewMessage = () => {
 			console.log(data);
 	
 			if (!data.error) {
+				// clear fields, give success msg
+				setLoading(false);
+				document.getElementById('messageBody').value = '';
+				setSuccess(true);
 				router.push('/dash');  
 			} else {
+				setLoading(false);
 				setError(true);
 			}
     }
@@ -45,7 +55,8 @@ const AddNewMessage = () => {
 			<h3 className="font-black text-3xl text-sky-900">
 				Add New Message
 			</h3>
-			{error ? <ErrorMessage message="Error adding workout" /> : ''}
+			{error && !loading ? <ErrorMessage message="Error adding message" /> : ''}
+			{success && !loading ? <SuccessMessage message="Message added!" /> : ''}
 			<form id="addNewMessageForm" className="mt-5" onSubmit={submitMessageHandler}>
 			<div className="flex flex-col mb-3">
 				<label 
@@ -60,10 +71,10 @@ const AddNewMessage = () => {
 					ref={messageTypeRef}
 					required
 				>
-					<option>On track</option>
-					<option>Motivational</option>
-					<option>Could be better...</option>
-					<option>Get out there!</option>
+					<option value="ON_TRACK">On track</option>
+					<option value="MOTIVATIONAL">Motivational</option>
+					<option value="DO_BETTER">Could be better...</option>
+					<option value="DO_BETTER_ER">Get out there!</option>
 				</select>
 			</div>
 			<div className="flex flex-col mb-3">
@@ -99,6 +110,7 @@ const AddNewMessage = () => {
 						rounded-2xl 
 						shadow-lg
 					"
+					disabled={loading ? true : false}
 				>
 					Add New Message
 				</button>

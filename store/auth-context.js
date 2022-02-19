@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
@@ -34,12 +34,15 @@ export const AuthProvider = (props) => {
 	const [user, setUser] = useState();
 	const auth = props.myAuth || { status: 'SIGNED_OUT', user: null };
 
-	if (auth.user) {
-		console.log(auth.user);
-		setUser(auth.user);
-		console.log('user set');
-		console.log(user)
-	}
+	useEffect(() => {
+		if (auth.user) {
+			console.log(auth.user);
+			setUser(auth.user);
+			console.log('user set');
+			console.log(user)
+		}
+	}, [user])
+
 
 	return <AuthContext.Provider value={{ auth, user, setUser }}>{props.children}</AuthContext.Provider>
 }

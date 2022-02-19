@@ -2,10 +2,14 @@ import { useRef, useState } from "react";
 import classes from './DashHome.module.css';
 import { useAuth } from "../../store/auth-context";
 import ErrorMessage from '../../components/ui/ErrorMessage';
+import SuccessMessage from "../ui/SuccessMessage";
 import { useRouter } from "next/router";
 
 const AddNewWorkout = () => {
 	const [error, setError] = useState(false);
+	const [success, setSuccess] = useState(false);
+	const [loading, setLoading] = useState(false);
+
 	const { auth, user, setUser } = useAuth();
 	const router = useRouter();
     const workoutTypeRef = useRef();
@@ -13,13 +17,14 @@ const AddNewWorkout = () => {
 
     const submitWorkoutHandler = async (event) => {
         event.preventDefault();
+		setLoading(true);
 
 		// TODO: error handling
 
         const workoutData = {
             workout_type: workoutTypeRef.current.value,
             duration: workoutDurationRef.current.value,
-			user_id: auth.user._id,
+			user_id: user._id,
         }
 
 		const response = await fetch('/api/new-workout', {
@@ -34,8 +39,15 @@ const AddNewWorkout = () => {
 			console.log(data);
 	
 			if (!data.error) {
+				// clear fields, give success msg
+				setLoading(false);
+				document.getElementById('workoutType').value = '';
+				document.getElementById('workoutDuration').value = 1;
+				document.getElementById('rangeDuration').value = '';
+				setSuccess(true);
 				router.push('/dash');  
 			} else {
+				setLoading(false);
 				setError(true);
 			}
     }
@@ -50,7 +62,8 @@ const AddNewWorkout = () => {
 			<h3 className="font-black text-3xl text-sky-900">
 				Add New Workout
 			</h3>
-			{error ? <ErrorMessage message="Error adding workout" /> : ''}
+			{error && !loading ? <ErrorMessage message="Error adding workout" /> : ''}
+			{success && !loading ? <SuccessMessage message="Workout added!" /> : ''}
 			<form id="addNewWorkoutForm" className="mt-5" onSubmit={submitWorkoutHandler}>
 			<div className="flex flex-col mb-3">
 				<label 
@@ -120,6 +133,7 @@ const AddNewWorkout = () => {
 						rounded-2xl 
 						shadow-lg
 					"
+					disabled={loading ? true : false}
 				>
 					Add New Workout
 				</button>

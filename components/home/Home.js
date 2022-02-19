@@ -29,7 +29,7 @@ const Home = () => {
 
     }
     return (
-        <div className="flex h-screen bg-white">
+        <div className="flex h-screen bg-blue-200">
             <div className="flex mx-auto bg-purple-500 self-center p-10 rounded-2xl shadow-lg">
                 <div className="flex-1">
                     Image here

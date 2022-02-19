@@ -5,14 +5,13 @@ import { ironOptions } from '../../lib/config';
 export default withIronSessionApiRoute(handler, ironOptions);
 
 async function handler (req, res) {
-    if (req.method === 'POST' && req.body.workout_type && req.body.duration) {
+    if (req.method === 'POST' && req.body.message_type && req.body.message_body) {
         try {
 			const date = new Date();
-			console.log('date is ' + date);
 			
-			const workout = {
-				workout_type: req.body.workout_type,
-				duration: req.body.duration,
+			const message = {
+				message_type: req.body.message_type,
+				message_body: req.body.message_body,
 				user_id: req.body.user_id, // or req.session
 				date: date,
 			}
@@ -21,18 +20,18 @@ async function handler (req, res) {
             const client = await MongoClient.connect(process.env.MONGO_CONNECT);
             const db = client.db();
 
-            const workoutsCollection = db.collection('workouts');
-			const savedWorkout = await workoutsCollection.insertOne({workout});
+            const messagesCollection = db.collection('messages');
+			const savedMessage = await messagesCollection.insertOne({message});
 
-			console.log(savedWorkout);
+			console.log(savedMessage);
 
 			client.close();
 
-			await res.status(201).json({message: 'new workout added'});
+			await res.status(201).json({message: 'new message added'});
             
         } catch (e) {
             console.log('error ', e);
-						await res.status(403).json({error: 'unable to add workout'});
+			await res.status(403).json({error: 'unable to add message'});
         }
     } 
 }
