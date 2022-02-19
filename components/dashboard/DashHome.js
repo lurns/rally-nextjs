@@ -14,6 +14,7 @@ const DashHome =  () => {
                     <p>other info to go here (last workout, 
                         whether they&apos;re reaching their weekly target
                     </p>
+                    <p>so need: Workout component, and Goal component?</p>
                 </div>
                 <div className="flex-1">
                     <AddNewWorkout />
