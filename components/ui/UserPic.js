@@ -4,19 +4,16 @@ import { useAuth } from '../../store/auth-context';
 
 const DEFAULT_URL = 'https://res.cloudinary.com/dgnsgqoi9/image/upload/v1645384204/rally/Rally_default_f15otb.png'
 
-export const UserPic = (props) => {
+export const UserPic = () => {
   	const {auth, user, setUser} = useAuth();
 	const [picURL, setPicURL] = useState(DEFAULT_URL)
 
+	// BUG: this is still rendering wonky/infinite loops
 	useEffect(() => {
-		setPicURL(user?.user?.pic_url ? user.user.pic_url : DEFAULT_URL);
-		let ls = JSON.parse(localStorage.getItem('rally_storage'))
-
-		if (user?.user?.pic_url !== ls.user.pic_url) {
-			setPicURL(ls.user.pic_url);
+		if (user) {
+			setPicURL(user.user.pic_url)
 		}
-
-	}, [picURL, user])
+	})
 
 	return (
 		<div className="mx-auto relative w-1/2 self-center mt-5 aspect-square">

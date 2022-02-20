@@ -18,7 +18,7 @@ const Status = () => {
 	return (
 		<div>
 			<h3 className="font-black text-4xl text-yellow-500 bg-yellow-900 w-fit p-2">
-				Hey, { auth?.user?.user?.nickname || user?.user?.nickname }!
+				Hey, { user?.user?.nickname }!
 			</h3>
 			<MessageBubble message="Test message in heah" />
 			<UserPic />
