@@ -14,7 +14,7 @@ export const UploadNewPic = (props) => {
 
 	useEffect(() => {
 		if (success) {
-			setUser(localStorage.getItem('rally_storage'));
+			setUser(JSON.parse(localStorage.getItem('rally_storage')));
 		}
 	}, [success])
 

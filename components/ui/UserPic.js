@@ -10,12 +10,13 @@ export const UserPic = (props) => {
 
 	useEffect(() => {
 		setPicURL(user?.user?.pic_url ? user.user.pic_url : DEFAULT_URL);
+		let ls = JSON.parse(localStorage.getItem('rally_storage'))
 
-		if (typeof user === 'string') {
-			var parse = JSON.parse(localStorage.getItem('rally_storage'));
-			setPicURL(parse.user.pic_url);
+		if (user?.user?.pic_url !== ls.user.pic_url) {
+			setPicURL(ls.user.pic_url);
 		}
-	}, [user])
+
+	}, [picURL, user])
 
 	return (
 		<div className="mx-auto relative w-1/2 self-center mt-5 aspect-square">
