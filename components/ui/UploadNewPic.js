@@ -2,12 +2,14 @@ import { useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import SuccessMessage from "./SuccessMessage";
 import { useRouter } from "next/router";
+import { useAuth } from "../../store/auth-context";
 
 export const UploadNewPic = (props) => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const router = useRouter();
+	const { auth, user, setUser } = useAuth();
 
 	const uploadNewPicHandler = async (event) => {
         event.preventDefault();
@@ -33,9 +35,39 @@ export const UploadNewPic = (props) => {
 					// File uploaded successfully
 					var response = JSON.parse(xhr.responseText);
 					url = response.secure_url;
-					
+
 					// save url to user in db
 					sendToDb({pic_url: url});
+					if (!data.error) {
+						console.log('USER ??')
+						console.log(user)
+						console.log(url);
+						// update state
+						var updatedUser = {
+							_id: user._id,
+							user: {
+								nickname: user.user.nickname,
+								email: user.user.email,
+								password: '',
+								pic_url: url,
+							}
+						}
+
+						// update localstorage
+						setUser(updatedUser);
+						localStorage.setItem('rally_storage', JSON.stringify(updatedUser))
+						console.log('updated user')
+						console.log(user);
+
+						// clear fields, give success msg
+						setLoading(false);
+						document.getElementById('uploadNewPic').value = '';
+						setSuccess(true);
+						router.push('/dash');  
+					} else {
+						setLoading(false);
+						setError(true);
+					}
 				}
 			};
 			fd.append('upload_preset', unsignedUploadPreset);
@@ -60,16 +92,7 @@ export const UploadNewPic = (props) => {
 
 		await sendToCloudinary();
 
-		if (!data.error) {
-			// clear fields, give success msg
-			setLoading(false);
-			document.getElementById('uploadNewPic').value = '';
-			setSuccess(true);
-			router.push('/dash');  
-		} else {
-			setLoading(false);
-			setError(true);
-		}
+		
     }
 
 	return (
