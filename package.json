@@ -11,6 +11,7 @@
   "dependencies": {
     "@tailwindcss/forms": "^0.4.0",
     "bcrypt": "^5.0.1",
+    "cloudinary": "^1.28.1",
     "dotenv": "^10.0.0",
     "iron-session": "^6.0.5",
     "mongodb": "^4.1.3",

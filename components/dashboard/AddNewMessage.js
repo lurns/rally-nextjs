@@ -109,6 +109,7 @@ const AddNewMessage = () => {
 						text-white 
 						rounded-2xl 
 						shadow-lg
+						disabled:bg-slate-400
 					"
 					disabled={loading ? true : false}
 				>

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAuth } from "../../store/auth-context";
 import UserPic from "../ui/UserPic";
 import MessageBubble from "../ui/MessageBubble";
+import UploadNewPic from "../ui/UploadNewPic";
 
 const Status = () => {
 	const { auth, user, setUser } = useAuth();
@@ -21,6 +22,7 @@ const Status = () => {
 			</h3>
 			<MessageBubble message="Test message in heah" />
 			<UserPic />
+			<UploadNewPic />
 		<p>block to show status</p>
 		</div>
 	)
