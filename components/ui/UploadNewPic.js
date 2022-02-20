@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import SuccessMessage from "./SuccessMessage";
 import { useRouter } from "next/router";
@@ -10,6 +10,13 @@ export const UploadNewPic = (props) => {
 	const [success, setSuccess] = useState(false);
 	const router = useRouter();
 	const { auth, user, setUser } = useAuth();
+	var updatedUser = user;
+
+	useEffect(() => {
+		if (success) {
+			setUser(localStorage.getItem('rally_storage'));
+		}
+	}, [success])
 
 	const uploadNewPicHandler = async (event) => {
         event.preventDefault();
@@ -37,13 +44,11 @@ export const UploadNewPic = (props) => {
 					url = response.secure_url;
 
 					// save url to user in db
-					sendToDb({pic_url: url});
+					data = sendToDb({pic_url: url});
+
 					if (!data.error) {
-						console.log('USER ??')
-						console.log(user)
-						console.log(url);
 						// update state
-						var updatedUser = {
+						updatedUser = {
 							_id: user._id,
 							user: {
 								nickname: user.user.nickname,
@@ -52,13 +57,10 @@ export const UploadNewPic = (props) => {
 								pic_url: url,
 							}
 						}
-
-						// update localstorage
-						setUser(updatedUser);
-						localStorage.setItem('rally_storage', JSON.stringify(updatedUser))
-						console.log('updated user')
-						console.log(user);
-
+						// console.log('this is the new user')
+						// console.log(updatedUser);
+						localStorage.setItem('rally_storage', JSON.stringify(updatedUser));
+			
 						// clear fields, give success msg
 						setLoading(false);
 						document.getElementById('uploadNewPic').value = '';
@@ -87,11 +89,10 @@ export const UploadNewPic = (props) => {
 			});
 		
 			data = await response.json();
-			console.log(data);
+			return data;
 		}
 
 		await sendToCloudinary();
-
 		
     }
 

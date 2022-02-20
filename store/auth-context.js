@@ -36,13 +36,10 @@ export const AuthProvider = (props) => {
 
 	useEffect(() => {
 		if (auth.user) {
-			console.log(auth.user);
 			setUser(auth.user);
-			console.log('user set');
-			console.log(user)
+			auth.user = user;
 		}
-	}, [auth.user, user])
-
+	}, [auth.user])
 
 	return <AuthContext.Provider value={{ auth, user, setUser }}>{props.children}</AuthContext.Provider>
 }

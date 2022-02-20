@@ -14,7 +14,6 @@ async function handler (req, res) {
             const client = await MongoClient.connect(process.env.MONGO_CONNECT);
             const db = client.db();
 			const id = req.session.user.id;
-			console.log(req.session.user.id);
 
             const usersCollection = db.collection('users');
 			const userDb = await usersCollection.findOne({"_id":ObjectId(id)});

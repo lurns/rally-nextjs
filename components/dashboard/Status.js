@@ -21,7 +21,7 @@ const Status = () => {
 				Hey, { auth?.user?.user?.nickname || user?.user?.nickname }!
 			</h3>
 			<MessageBubble message="Test message in heah" />
-			<UserPic pic_url={auth?.user?.user?.pic_url || user?.user?.pic_url} />
+			<UserPic />
 			<UploadNewPic />
 		<p>block to show status</p>
 		</div>
