@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Home from '../components/home/Home';
 
 export const HomePage = () => {
+
   return (
     <Home />
   )
