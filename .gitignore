@@ -33,5 +33,8 @@ yarn-error.log*
 # vercel
 .vercel
 
-# uhh other .env right?
+# .env
 .env
+
+# git
+.gitignore
