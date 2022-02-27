@@ -31,6 +31,7 @@ export const UploadNewPic = (props) => {
 		var data = ''
 
 		// TODO: error handling
+		// make sure image is selected
 
 		// send pic to cloudinary
 		const sendToCloudinary = () => {
@@ -98,7 +99,7 @@ export const UploadNewPic = (props) => {
     }
 
 	return (
-		<div className="align-content-center">
+		<div className="align-content-center bg-slate-100 rounded-2xl mt-3 mb-3 mr-5 p-3">
 			{!loading && error ? <ErrorMessage message="Error uploading photo." /> : ''}
 			{!loading && success ? <SuccessMessage message="Photo updated." /> : ''}
 			<form id="uploadNewPicForm" className="mt-5" onSubmit={uploadNewPicHandler} encType="multipart/form-data" >

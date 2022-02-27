@@ -10,7 +10,7 @@ const Status = () => {
 	// TODO: logic for determining what message to deliver
 
 	useEffect(() => {
-		if(auth.status === 'SIGNED_OUT' && localStorage.getItem('rally_storage') !== '') {
+		if (localStorage.getItem('rally_storage') !== '') {
 			setUser(JSON.parse(localStorage.getItem('rally_storage')));
 		}
 	}, [auth]);

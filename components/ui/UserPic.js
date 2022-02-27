@@ -11,12 +11,12 @@ export const UserPic = () => {
 	// BUG: this is still rendering wonky/infinite loops
 	useEffect(() => {
 		if (user) {
-			setPicURL(user.user.pic_url)
+			setPicURL(user.user?.pic_url)
 		}
-	})
+	}, [user, setPicURL])
 
 	return (
-		<div className="mx-auto relative w-1/2 self-center mt-5 aspect-square">
+		<div className="mx-auto relative w-1/2 self-center mt-5 aspect-square relative">
 			<Image alt="profile pic" layout="fill" className="object-cover rounded-full" src={picURL} />
 		</div>
 	)
