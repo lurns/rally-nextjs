@@ -23,7 +23,6 @@ const Status = () => {
 			<MessageBubble message="Test message in heah" />
 			<UserPic />
 			<UploadNewPic />
-		<p>block to show status</p>
 		</div>
 	)
 }

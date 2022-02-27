@@ -1,6 +1,7 @@
 import AddNewWorkout from "./AddNewWorkout";
 import AddNewMessage from "./AddNewMessage";
 import Status from "./Status";
+import SingleWorkout from "./SingleWorkout";
 import { useAuth } from "../../store/auth-context";
 
 const DashHome =  () => {
@@ -11,6 +12,7 @@ const DashHome =  () => {
             <div className="flex mx-auto bg-slate-200 self-center p-10 rounded-2xl shadow-lg">
                 <div className="flex-1">
                     <Status />
+                    <SingleWorkout />
                     <p>other info to go here (last workout, 
                         whether they&apos;re reaching their weekly target
                     </p>
