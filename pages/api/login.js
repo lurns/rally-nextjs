@@ -28,16 +28,19 @@ async function handler (req, res) {
 						id: userDb._id,
 					}
 
-					await req.session.save();
+					await req.session.save().then(data => {
+						return res.send(JSON.stringify(req.session.user));
+					});
 					// console.log(req.session);
-					await res.json(req.session.user);
+					//await res.end(JSON.stringify(req.session.user));
 				}
+			} else {
+				// give err
+				await res.status(403).json({error: 'User not found.'});
 			}
-
-			// give err
-			await res.status(403).json({error: 'User not found.'});
             
         } catch (e) {
+			console.log('in login.js')
             console.log('error ', e);
         }
     } 

@@ -13,6 +13,7 @@ async function handler (req, res) {
 		const usersCollection = db.collection('users');
 		const userDb = await usersCollection.findOne({"_id":ObjectId(req.session.user.id)});
 		userDb.user.password='';
+		console.log(userDb)
 		client.close();
 
 		await res.json(userDb);

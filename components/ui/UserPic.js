@@ -8,16 +8,15 @@ export const UserPic = () => {
   	const {auth, user, setUser} = useAuth();
 	const [picURL, setPicURL] = useState(DEFAULT_URL)
 
-	// BUG: this is still rendering wonky/infinite loops
 	useEffect(() => {
 		if (user) {
 			setPicURL(user.user?.pic_url)
 		}
-	}, [user, setPicURL])
+	}, [user]);
 
 	return (
 		<div className="mx-auto relative w-1/2 self-center mt-5 aspect-square relative">
-			<Image alt="profile pic" layout="fill" className="object-cover rounded-full" src={picURL} />
+			<Image alt="profile pic" layout="fill" className="object-cover rounded-full" src={picURL || DEFAULT_URL} />
 		</div>
 	)
 }

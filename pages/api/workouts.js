@@ -27,13 +27,13 @@ async function handler (req, res) {
 
 			// send workouts
 			if (workouts) {
-				await res.json(workouts);
-			}
-
-			// give err
-			await res.status(403).json({error: 'No workouts'});
-            
+				await res.status(200).json(workouts);
+			} else {
+				// give err
+				await res.status(403).json({error: 'No workouts'});
+			}           
         } catch (e) {
+			console.log('in workouts.js')
             console.log('error ', e);
         }
     } 

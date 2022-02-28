@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { server } from "../lib/config";
 
 const AuthContext = createContext();
 
@@ -7,16 +8,18 @@ export const getUser = async() => {
 		// see if user in localstorage
 		let user;
 
-		if (localStorage.getItem('rally_storage')) {
-			user = localStorage.getItem('rally_storage');
-		} else {
-			const response = await fetch('api/auth', {
-				method: 'GET',
-			});
+		if (typeof window !== 'undefined') {
+			if (localStorage.getItem('rally_storage')) {
+				user = localStorage.getItem('rally_storage');
+			} else {
+				const response = await fetch(`${server}api/auth`, {
+					method: 'GET',
+				});
 
-			user = await response.json();
+				user = await response.json();
 
-			localStorage.setItem('rally_storage', JSON.stringify(user));
+				localStorage.setItem('rally_storage', JSON.stringify(user));
+			}
 		}
 
 		if (user) {
@@ -24,7 +27,7 @@ export const getUser = async() => {
 		} else {
 			return { status: 'SIGNED_OUT', user: null };
 		}
-	} catch(e) {
+	} catch (e) {
 		return { status: 'SIGNED_OUT', user: null };
 	}
 
