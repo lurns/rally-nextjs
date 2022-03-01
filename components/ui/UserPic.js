@@ -10,11 +10,10 @@ export const UserPic = () => {
 	const [count, setCount] = useState(0);
 
 	useEffect(() => {
-		if (user && count < 3) {
+		if (user) {
 			setPicURL(user.user?.pic_url)
-			setCount(count => count +1);
 		}
-	}, [user, count]);
+	}, [user]);
 
 	return (
 		<div className="mx-auto relative w-1/2 self-center mt-5 aspect-square relative">

@@ -35,16 +35,10 @@ export const getUser = async() => {
 
 export const AuthProvider = (props) => {
 	const [user, setUser] = useState();
-	const auth = props.myAuth || { status: 'SIGNED_OUT', user: null };
 
-	useEffect(() => {
-		if (auth.user) {
-			setUser(auth.user);
-			auth.user = user;
-		}
-	}, []);
+	const userValue = useMemo(() => ({ user, setUser}), [user, setUser]);
 
-	return <AuthContext.Provider value={{ auth, user, setUser }}>{props.children}</AuthContext.Provider>
+	return <AuthContext.Provider value={userValue}>{props.children}</AuthContext.Provider>
 }
 
 export const useAuth = () => useContext(AuthContext);
