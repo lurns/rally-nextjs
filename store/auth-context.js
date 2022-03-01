@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { server } from "../lib/config";
 
 const AuthContext = createContext();
@@ -42,7 +42,7 @@ export const AuthProvider = (props) => {
 			setUser(auth.user);
 			auth.user = user;
 		}
-	}, [auth.user])
+	}, []);
 
 	return <AuthContext.Provider value={{ auth, user, setUser }}>{props.children}</AuthContext.Provider>
 }

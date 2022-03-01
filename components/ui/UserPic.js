@@ -6,13 +6,15 @@ const DEFAULT_URL = 'https://res.cloudinary.com/dgnsgqoi9/image/upload/v16453842
 
 export const UserPic = () => {
   	const {auth, user, setUser} = useAuth();
-	const [picURL, setPicURL] = useState(DEFAULT_URL)
+	const [picURL, setPicURL] = useState(DEFAULT_URL);
+	const [count, setCount] = useState(0);
 
 	useEffect(() => {
-		if (user) {
+		if (user && count < 3) {
 			setPicURL(user.user?.pic_url)
+			setCount(count => count +1);
 		}
-	}, [user]);
+	}, [user, count]);
 
 	return (
 		<div className="mx-auto relative w-1/2 self-center mt-5 aspect-square relative">

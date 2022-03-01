@@ -12,12 +12,12 @@ export const UploadNewPic = (props) => {
 	const { auth, user, setUser } = useAuth();
 	var updatedUser = user;
 
-	useEffect(() => {
-		if (success) {
-			console.log('success hit')
-			setUser(JSON.parse(localStorage.getItem('rally_storage')));
-		}
-	}, [success])
+	// useEffect(() => {
+	// 	if (success) {
+	// 		console.log('success hit')
+	// 		setUser(JSON.parse(localStorage.getItem('rally_storage')));
+	// 	}
+	// }, [success, setUser])
 
 	const uploadNewPicHandler = async (event) => {
         event.preventDefault();
@@ -62,6 +62,7 @@ export const UploadNewPic = (props) => {
 						// console.log('this is the new user')
 						// console.log(updatedUser);
 						localStorage.setItem('rally_storage', JSON.stringify(updatedUser));
+						setUser(JSON.parse(localStorage.getItem('rally_storage')));
 			
 						// clear fields, give success msg
 						setLoading(false);

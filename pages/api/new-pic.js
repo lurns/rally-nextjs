@@ -6,7 +6,6 @@ import { ironOptions } from '../../lib/config';
 export default withIronSessionApiRoute(handler, ironOptions);
 
 async function handler (req, res) {
-	console.log('in api/new-pic')
     if (req.method === 'POST' && req.body.pic_url) {
         // make sure user matches in db
         try {
@@ -33,8 +32,9 @@ async function handler (req, res) {
 			}
         } catch (e) {
 			// give err
-			await res.status(403).json({error: 'User not found.'});
+			console.log('in api/new-pic')
             console.log('error ', e);
+			await res.status(403).json({error: 'User not found.'});
         }
     } 
 }
