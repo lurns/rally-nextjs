@@ -18,6 +18,7 @@ const SingleWorkout = () => {
 			});
 
 			const res = await response.json();
+			console.log(res)
 
 			if (res.error) {
 				setLoading(false);

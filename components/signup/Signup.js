@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import Link from "next/dist/client/link";
 
 const Signup = (props) => {
     const nicknameRef = useRef();
@@ -95,7 +96,14 @@ const Signup = (props) => {
                     <button type="submit" className="min-w-full mt-5 p-4 bg-purple-500 font-bold text-yellow-200 rounded-2xl shadow-lg">Sign up</button>
                 </div>
                 <div>
-                    <p className="italic text-sm text-purple-400">Already have an account? Log in.</p>
+                    <p className="italic text-sm text-purple-400">
+                        Already have an account?&nbsp;
+                        <Link href="/">
+                            <span className="underline cursor-pointer">
+                                Log in.        
+                            </span>
+                        </Link>
+                    </p>
                 </div>
 
             </form>

@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import Link from "next/dist/client/link";
 import ErrorMessage from '../../components/ui/ErrorMessage';
 
 const LoginForm = (props) => {
@@ -60,7 +61,14 @@ const LoginForm = (props) => {
                     <button className="min-w-full mt-5 p-4 bg-white font-bold text-purple-700 rounded-2xl shadow-lg">Log in</button>
                 </div>
                 <div>
-                    <p className="italic text-sm text-yellow-200">Need an account? Sign up.</p>
+                    <p className="italic text-sm text-yellow-200">
+                        Need an account?&nbsp;
+                        <Link href="/signup">
+                            <span className="underline cursor-pointer">
+                                Sign up.        
+                            </span>
+                        </Link>
+                    </p>
                 </div>
 
             </form>

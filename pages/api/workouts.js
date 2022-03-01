@@ -15,7 +15,7 @@ async function handler (req, res) {
 
 			// get workouts from cursor
 			const cursor = await workoutsCollection
-				.find({});
+				.find({ "workout.user_id": req.session.user.id });
 			const workouts = await cursor.toArray();
 			
 			// sort by most recent
