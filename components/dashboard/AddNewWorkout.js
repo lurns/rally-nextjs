@@ -1,14 +1,16 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import classes from './DashHome.module.css';
 import { useAuth } from "../../store/auth-context";
 import ErrorMessage from '../../components/ui/ErrorMessage';
 import SuccessMessage from "../ui/SuccessMessage";
 import { useRouter } from "next/router";
+import { WorkoutContext } from "../../store/workout-context";
 
 const AddNewWorkout = () => {
 	const [error, setError] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const { workouts, setWorkouts } = useContext(WorkoutContext);
 
 	const { auth, user, setUser } = useAuth();
 	const router = useRouter();
@@ -36,7 +38,6 @@ const AddNewWorkout = () => {
 			});
 	
 			const data = await response.json();
-			console.log(data);
 	
 			if (!data.error) {
 				// clear fields, give success msg
@@ -45,6 +46,10 @@ const AddNewWorkout = () => {
 				document.getElementById('workoutDuration').value = 1;
 				document.getElementById('rangeDuration').value = '';
 				setSuccess(true);
+
+				// update workouts, add newest to beginning
+				setWorkouts((current) => [data, ...current]);
+
 				router.push('/dash');  
 			} else {
 				setLoading(false);

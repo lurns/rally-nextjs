@@ -3,10 +3,12 @@ import AddNewMessage from "./AddNewMessage";
 import Status from "./Status";
 import SingleWorkout from "./SingleWorkout";
 import { useAuth } from "../../store/auth-context";
+import { WorkoutContext } from "../../store/workout-context";
+import { useContext } from "react";
 
 const DashHome =  () => {
     const { auth } = useAuth();
-
+    const { workouts } = useContext(WorkoutContext);
 
     return (
         <div className="flex h-screen bg-slate-700">

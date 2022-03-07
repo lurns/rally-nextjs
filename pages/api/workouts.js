@@ -22,7 +22,7 @@ async function handler (req, res) {
 			workouts.sort((a,b) => {
 				return b.workout.date - a.workout.date;
 			});
-				
+
 			client.close();
 
 			// send workouts

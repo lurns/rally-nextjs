@@ -22,17 +22,19 @@ async function handler (req, res) {
             const db = client.db();
 
             const workoutsCollection = db.collection('workouts');
-			const savedWorkout = await workoutsCollection.insertOne({workout});
+			const saveWorkout = await workoutsCollection.insertOne({workout});
 
-			console.log(savedWorkout);
+			// return new workouts
+			const addedWorkout = await workoutsCollection.findOne({ "_id": saveWorkout.insertedId });
+			console.log(addedWorkout)
 
 			client.close();
 
-			await res.status(201).json({message: 'new workout added'});
+			await res.status(201).json(addedWorkout);
             
         } catch (e) {
             console.log('error ', e);
-						await res.status(403).json({error: 'unable to add workout'});
+			await res.status(403).json({error: 'unable to add workout'});
         }
     } 
 }
