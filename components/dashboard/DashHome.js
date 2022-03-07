@@ -10,11 +10,11 @@ const DashHome =  () => {
 
     return (
         <div className="flex h-screen bg-slate-700">
-            <div className="flex mx-auto bg-slate-200 self-center p-10 rounded-2xl shadow-lg">
+            <div className="flex mx-auto w-3/4 bg-slate-200 self-center p-10 rounded-2xl shadow-lg">
                 <div className="flex-1">
                     <Status />
                     <SingleWorkout />
-                    <p>Goal component</p>
+                    <p>Goal component - has user completed 3 workouts for the week?</p>
                 </div>
                 <div className="flex-1">
                     <AddNewWorkout />

@@ -11,12 +11,16 @@ async function handler (req, res) {
 		const db = client.db();
 
 		const usersCollection = db.collection('users');
-		const userDb = await usersCollection.findOne({"_id":ObjectId(req.session.user.id)});
-		userDb.user.password='';
-		console.log(userDb)
+		const cursor = await usersCollection
+			.find({"_id":ObjectId(req.session.user.id)})
+			.project({"user.password": 0})
+			.limit(1);
+
+		const userDb = await cursor.toArray();
+		// console.log(userDb)
 		client.close();
 
-		await res.json(userDb);
+		await res.json(userDb[0]);
 		
 	} catch (e) {
 		console.log('err retrieving user');

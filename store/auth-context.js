@@ -9,17 +9,13 @@ export const getUser = async() => {
 		let user;
 
 		if (typeof window !== 'undefined') {
-			if (localStorage.getItem('rally_storage')) {
-				user = localStorage.getItem('rally_storage');
-			} else {
-				const response = await fetch(`${server}api/auth`, {
-					method: 'GET',
-				});
+			const response = await fetch(`${server}api/auth`, {
+				method: 'GET',
+			});
 
-				user = await response.json();
+			user = await response.json();
 
-				localStorage.setItem('rally_storage', JSON.stringify(user));
-			}
+			localStorage.setItem('rally_storage', JSON.stringify(user));
 		}
 
 		if (user) {
