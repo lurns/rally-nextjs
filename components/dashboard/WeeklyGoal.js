@@ -33,7 +33,7 @@ const WeeklyGoal = () => {
 			goalDiv.classList.add('bg-green-300')
 		}
 
-	}, [workouts]);
+	}, [workouts, weekWorkouts]);
 
 	return (
 		<div className="mx-auto bg-slate-700 self-center mt-5 mr-5 p-5 rounded-2xl shadow-lg">
