@@ -5,6 +5,7 @@ import SingleWorkout from "./SingleWorkout";
 import { useAuth } from "../../store/auth-context";
 import { WorkoutContext } from "../../store/workout-context";
 import { useContext } from "react";
+import WeeklyGoal from "./WeeklyGoal";
 
 const DashHome =  () => {
     const { auth } = useAuth();
@@ -16,7 +17,7 @@ const DashHome =  () => {
                 <div className="flex-1">
                     <Status />
                     <SingleWorkout />
-                    <p>Goal component - has user completed 3 workouts for the week?</p>
+                    <WeeklyGoal />
                 </div>
                 <div className="flex-1">
                     <AddNewWorkout />
