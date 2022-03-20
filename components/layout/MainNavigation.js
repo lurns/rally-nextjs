@@ -21,7 +21,7 @@ const MainNavigation = () => {
                             <Link href="/workouts">Workouts</Link>
                         </li>
                         <li>
-                            <Link href="/workouts">Profile</Link>
+                            <Link href="/profile">Profile</Link>
                         </li>
                     </>
                     }

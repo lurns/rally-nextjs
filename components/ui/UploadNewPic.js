@@ -14,7 +14,7 @@ export const UploadNewPic = (props) => {
 
 	useEffect(() => {
 		if (success) {
-			console.log('success hit')
+			//console.log('success hit')
 			setUser(JSON.parse(localStorage.getItem('rally_storage')));
 		}
 	}, [success, setUser])
@@ -68,7 +68,7 @@ export const UploadNewPic = (props) => {
 						setLoading(false);
 						document.getElementById('uploadNewPic').value = '';
 						setSuccess(true);
-						router.push('/dash');  
+						//router.push('/dash');  
 					} else {
 						setLoading(false);
 						setError(true);

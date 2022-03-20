@@ -42,7 +42,7 @@ const Status = () => {
 		if (localStorage.getItem('rally_storage') !== '') {
 			setUser(JSON.parse(localStorage.getItem('rally_storage')));
 		}
-	}, [auth]);
+	}, [auth, setUser]);
 
 	useEffect(() => {
 		if (workouts[0]) {
