@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAuth } from "../../store/auth-context";
 import UploadNewPic from "../ui/UploadNewPic";
 import UserPic from "../ui/UserPic";
+import UpdateEmail from "./UpdateEmail";
 import UpdateNickname from "./UpdateNickname";
 
 const Profile = () => {
@@ -32,9 +33,7 @@ const Profile = () => {
 			<h3 className="font-black text-4xl text-yellow-500 bg-yellow-900 w-fit p-2">
 				Update Email
 			</h3>
-			<p>
-				ok
-			</p>
+			<UpdateEmail />
 			<hr className="mt-5 mb-5 border-dotted border-slate-800" />
 			<h3 className="font-black text-4xl text-yellow-500 bg-yellow-900 w-fit p-2">
 				Update Password
