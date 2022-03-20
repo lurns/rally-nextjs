@@ -13,8 +13,6 @@ const Profile = () => {
 		}
 	}, [auth, setUser]);
 
-    console.log(user)
-
     return (
       <div className="flex h-screen bg-slate-700">
         <div className="flex mx-auto bg-slate-200 h-100 w-3/4 p-3">
