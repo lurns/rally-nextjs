@@ -4,6 +4,7 @@ import UploadNewPic from "../ui/UploadNewPic";
 import UserPic from "../ui/UserPic";
 import UpdateEmail from "./UpdateEmail";
 import UpdateNickname from "./UpdateNickname";
+import UpdatePassword from "./UpdatePassword";
 
 const Profile = () => {
     const { auth, user, setUser } = useAuth();
@@ -38,9 +39,7 @@ const Profile = () => {
 			<h3 className="font-black text-4xl text-yellow-500 bg-yellow-900 w-fit p-2">
 				Update Password
 			</h3>
-			<p>
-				ok
-			</p>
+			<UpdatePassword />
           </div>
 
         </div>
