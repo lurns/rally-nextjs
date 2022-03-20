@@ -6,7 +6,7 @@ export const WorkoutContext = createContext({});
 
 export const getWorkouts = async () => {
 	try {
-		const response = await fetch(`${server}/api/workouts`, {
+		const response = await fetch(`${server}api/workouts`, {
 			method: 'GET'
 		})
 
