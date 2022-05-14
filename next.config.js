@@ -1,6 +1,7 @@
 module.exports = {
-	reactStrictMode: true,
-	images: {
-		domains: ["i.imgur.com", "res.cloudinary.com"],
-	},
-}
+  reactStrictMode: true,
+  images: {
+    domains: ["i.imgur.com", "res.cloudinary.com"],
+  },
+  target: "serverless",
+};
