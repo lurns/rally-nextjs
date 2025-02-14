@@ -1,6 +1,15 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ["i.imgur.com", "res.cloudinary.com"],
-  }
+    loader: "default",
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/dgnsgqoi9/**',
+        search: '',
+      },
+    ],
+  },
 };

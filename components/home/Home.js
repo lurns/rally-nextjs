@@ -2,7 +2,7 @@ import LoginForm from '../../components/login/LoginForm';
 import { useRouter } from "next/router";
 import {useState} from 'react';
 import { useAuth } from "../../store/auth-context";
-import Image from 'next/dist/client/image';
+import Image from 'next/image';
 
 const Home = () => {
     // handle sending data to api/login

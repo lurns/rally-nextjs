@@ -20,7 +20,7 @@ export const UserPic = () => {
     <div className="mx-auto relative w-1/2 self-center mt-5 aspect-square relative">
       <Image
         alt="profile pic"
-        layout="fill"
+        fill={true}
         className="object-cover rounded-full"
         src={picURL || DEFAULT_URL}
       />
