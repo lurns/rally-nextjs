@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import getIronSession from 'iron-session'
+import { getIronSession } from 'iron-session'
 import { ironOptions } from '../../lib/config';
 
 export default async function handler (req, res) {
