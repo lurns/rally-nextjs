@@ -80,7 +80,7 @@ const AddNewWorkout = () => {
 					type="text"
 					name="workoutType"
 					id="workoutType"
-					className="border-slate-300"
+					className="form-input border-1 border-slate-300 bg-slate-100 rounded-lg p-2"
 					ref={workoutTypeRef}
 					required
 				/>
@@ -103,6 +103,7 @@ const AddNewWorkout = () => {
 							p-0
 							mt-4
 							mb-2
+							border-3 border-slate-400 rounded-lg
 							focus:outline-none focus:ring-0 focus:shadow-none
 						"
 						id="workoutDuration"

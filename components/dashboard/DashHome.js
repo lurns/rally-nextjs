@@ -12,7 +12,7 @@ const DashHome =  () => {
     const { workouts } = useContext(WorkoutContext);
 
     return (
-        <div className="flex h-screen bg-slate-700">
+        <div className="bg-slate-700 pt-5 pb-5">
             <div className="flex mx-auto w-3/4 bg-slate-200 self-center p-10 rounded-2xl shadow-lg">
                 <div className="flex-1">
                     <Status />

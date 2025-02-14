@@ -67,7 +67,7 @@ const AddNewMessage = () => {
 				<select 
 					name="messageType"
 					id="messageType"
-					className="border-slate-300 form-select"
+					className="form-select border-1 border-slate-300 bg-slate-100 rounded-lg p-2"
 					ref={messageTypeRef}
 					required
 				>
@@ -86,7 +86,7 @@ const AddNewMessage = () => {
 				<textarea
 					name="messageBody"
 					id="messageBody"
-					className="border-slate-300 form-textarea resize-none"
+					className="form-textarea border-1 border-slate-300 bg-slate-100 rounded-lg p-2 resize-none"
 					ref={messageBodyRef}
 					placeholder="Be gentle..."
 					maxLength="300"
