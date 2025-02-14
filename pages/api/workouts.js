@@ -1,11 +1,11 @@
 import { MongoClient, ObjectId } from "mongodb";
-import { withIronSessionApiRoute } from "iron-session/next";
+import { getIronSession } from "iron-session";
 import { ironOptions } from "../../lib/config";
 
-export default withIronSessionApiRoute(handler, ironOptions);
+export default async function handler(req, res) {
+  const session = await getIronSession(req, res, ironOptions)
 
-async function handler(req, res) {
-  if (req.method === "GET" && req.session.user) {
+  if (req.method === "GET" && session.user) {
     try {
       // find workout
       const client = await MongoClient.connect(process.env.MONGO_CONNECT);
@@ -14,7 +14,7 @@ async function handler(req, res) {
       const workoutsCollection = db.collection("workouts");
 
       // get workouts from cursor
-      const cursor = await workoutsCollection.find({ "workout.user_id": req.session.user.id });
+      const cursor = await workoutsCollection.find({ "workout.user_id": session.user.id });
       const workouts = await cursor.toArray();
 
       // sort by most recent

@@ -1,11 +1,10 @@
-import { MongoClient, ObjectId } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import bcrypt from 'bcrypt';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { getIronSession } from 'iron-session';
 import { ironOptions } from '../../lib/config';
 
-export default withIronSessionApiRoute(handler, ironOptions);
-
-async function handler (req, res) {
+export default async function handler (req, res) {
+		const session = await getIronSession(req, res, ironOptions)
     if (req.method === 'POST' && req.body.password && req.body.email) {
         // make sure user matches in db
         try {
@@ -24,15 +23,13 @@ async function handler (req, res) {
 				
 				// create session
 				if (result) {
-					req.session.user = {
-						id: userDb._id,
-					}
+						session.user = {
+							id: userDb._id,
+						}
 
-					await req.session.save().then(data => {
-						return res.send(JSON.stringify(req.session.user));
-					});
-					// console.log(req.session);
-					//await res.end(JSON.stringify(req.session.user));
+						await session.save().then(data => {
+							return res.send(JSON.stringify(session.user));
+						});
 				}
 			} else {
 				// give err
@@ -40,8 +37,8 @@ async function handler (req, res) {
 			}
             
         } catch (e) {
-			console.log('in login.js')
-            console.log('error ', e);
+					console.log('in login.js')
+					console.log('error ', e);
         }
     } 
 }

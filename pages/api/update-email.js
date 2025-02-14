@@ -1,18 +1,17 @@
 import { MongoClient, ObjectId } from 'mongodb';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { getIronSession } from 'iron-session';
 import { ironOptions } from '../../lib/config';
 
-export default withIronSessionApiRoute(handler, ironOptions);
-
-async function handler (req, res) {
-    if (req.method === 'POST' && req.body.email_input && req.session.user) {
+export default async function handler (req, res) {
+	const session = await getIronSession(req, res, ironOptions)
+    if (req.method === 'POST' && req.body.email_input && session.user) {
         try {
             const client = await MongoClient.connect(process.env.MONGO_CONNECT);
             const db = client.db();
 
             const usersCollection = db.collection('users');
 			const userDb = await usersCollection.updateOne(
-				{ "_id": ObjectId(req.session.user.id) },
+				{ "_id": new ObjectId(session.user.id) },
 				{ 
 					$set: { "user.email": req.body.email_input }
 				});

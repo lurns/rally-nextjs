@@ -1,10 +1,9 @@
-import { MongoClient, ObjectId } from 'mongodb';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { MongoClient } from 'mongodb';
+import { getIronSession } from 'iron-session';
 import { ironOptions } from '../../lib/config';
 
-export default withIronSessionApiRoute(handler, ironOptions);
-
-async function handler (req, res) {
+export default async function handler (req, res) {
+	const session = await getIronSession(req, res, ironOptions)
     if (req.method === 'POST' && req.body.workout_type && req.body.duration) {
         try {
 			const date = new Date();

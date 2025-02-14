@@ -1,25 +1,24 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { getIronSession } from 'iron-session';
 import { ironOptions } from '../../lib/config';
 
-export default withIronSessionApiRoute(handler, ironOptions);
-
-async function handler (req, res) {
+export default async function handler (req, res) {
+	const session = await getIronSession(req, res, ironOptions)
     if (req.method === 'POST' && req.body.pic_url) {
         // make sure user matches in db
         try {
             // find user
             const client = await MongoClient.connect(process.env.MONGO_CONNECT);
             const db = client.db();
-			const id = req.session.user.id;
+			const id = session.user.id;
 
             const usersCollection = db.collection('users');
-			const userDb = await usersCollection.findOne({"_id":ObjectId(id)});
+			const userDb = await usersCollection.findOne({"_id": new ObjectId(id)});
 
 			// if user found, attach pic
 			if (userDb) {
-				await usersCollection.updateOne({"_id": ObjectId(id)}, {
+				await usersCollection.updateOne({"_id": new ObjectId(id)}, {
 					$set: {"user.pic_url": req.body.pic_url}
 				});
 

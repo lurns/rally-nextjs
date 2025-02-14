@@ -1,12 +1,11 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { getIronSession } from 'iron-session'
 import { ironOptions } from '../../lib/config';
 
-export default withIronSessionApiRoute(handler, ironOptions);
-
-async function handler (req, res) {
-    if (req.method === 'POST' && req.body.oldPass && req.body.newPass &&  req.body.confirmNewPass &&req.session.user) {
+export default async function handler (req, res) {
+	const session = await getIronSession(req, res, ironOptions)
+    if (req.method === 'POST' && req.body.oldPass && req.body.newPass &&  req.body.confirmNewPass && session.user) {
         try {
 			// make sure passwords match
 			if (req.body.newPass !== req.body.confirmNewPass) {
@@ -19,7 +18,7 @@ async function handler (req, res) {
             const usersCollection = db.collection('users');
 
 			// make sure old password matches one in db
-			const userDb = await usersCollection.findOne({"_id": ObjectId(req.session.user.id)});
+			const userDb = await usersCollection.findOne({"_id": new ObjectId(session.user.id)});
 
 			if (userDb) {
 				var result = await bcrypt.compare(req.body.oldPass, userDb.user.password);
@@ -29,7 +28,7 @@ async function handler (req, res) {
 					bcrypt.genSalt(10, async (err, salt) => {
 						bcrypt.hash(req.body.newPass, salt, async (err, hash) => {
 							const setUserPassDb = await usersCollection.updateOne(
-								{ "_id": ObjectId(req.session.user.id) },
+								{ "_id": new ObjectId(session.user.id) },
 								{ 
 									$set: { "user.password": hash }
 							});

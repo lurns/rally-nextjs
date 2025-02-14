@@ -1,11 +1,10 @@
-import { MongoClient, ObjectId } from 'mongodb';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { MongoClient } from 'mongodb';
+import { getIronSession } from 'iron-session';
 import { ironOptions } from '../../lib/config';
 
-export default withIronSessionApiRoute(handler, ironOptions);
-
-async function handler (req, res) {
-    if (req.method === 'POST' && req.body.message_type && req.session.user.id) {
+export default async function handler (req, res) {
+	const session = await getIronSession(req, res, ironOptions)
+    if (req.method === 'POST' && req.body.message_type && session.user.id) {
         try {
 			const messageType = req.body.message_type;
 
@@ -17,7 +16,7 @@ async function handler (req, res) {
 
 			const cursor = await messagesCollection
 				.find({ 
-					"message.user_id": req.session.user.id, 
+					"message.user_id": session.user.id, 
 					"message.message_type": messageType,
 				});
 
