@@ -30,14 +30,14 @@ const LoginForm = (props) => {
                 <div className="flex flex-col mb-3">
                 <label 
                         htmlFor="email"
-                        className="text-left text-white"
+                        className="text-left text-white pb-1"
                     >Email
                     </label>
                     <input 
                         type="text"
                         name="rallyEmail"
                         id="rallyEmail"
-                        className="border-slate-300"
+                        className="border-1 border-slate-300 bg-white rounded-lg p-1"
                         ref={emailRef}
                         required
                     />
@@ -45,20 +45,35 @@ const LoginForm = (props) => {
                 <div className="flex flex-col mb-3">
                     <label 
                         htmlFor="password"
-                        className="text-left text-white"
+                        className="text-left text-white pb-1"
                     >Password
                     </label>
                     <input
                         type="password"
                         name="rallyPass"
                         id="rallyPass"
-                        className="border-slate-300"
+                        className="border-1 border-slate-300 bg-white rounded-lg p-1"
                         ref={passRef}
                         required
                     />
                 </div>
                 <div className="flex flex-col mb-3">
-                    <button className="min-w-full mt-5 p-4 bg-white font-bold text-purple-700 rounded-2xl shadow-lg">Log in</button>
+                    <button className="
+                        transition 
+                        duration-200 
+                        ease-in-out 
+                        min-w-full 
+                        mt-5 
+                        p-4 
+                        bg-white 
+                        font-bold 
+                        text-purple-700 
+                        rounded-2xl 
+                        shadow-lg
+                        hover:bg-purple-400
+                        hover:text-white
+                        hover:cursor-pointer
+                    ">Log in</button>
                 </div>
                 <div>
                     <p className="italic text-sm text-yellow-200">

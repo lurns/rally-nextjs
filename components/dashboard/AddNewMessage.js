@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import classes from './DashHome.module.css';
 import { useAuth } from "../../store/auth-context";
 import ErrorMessage from '../../components/ui/ErrorMessage';
 import SuccessMessage from "../ui/SuccessMessage";
@@ -51,7 +50,7 @@ const AddNewMessage = () => {
     }
 
   	return (
-		<div className={classes}>
+		<div>
 			<h3 className="font-black text-3xl text-sky-900">
 				Add New Message
 			</h3>

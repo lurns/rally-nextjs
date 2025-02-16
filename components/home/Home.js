@@ -29,8 +29,8 @@ const Home = () => {
 
     }
     return (
-        <div className="flex h-screen bg-blue-200">
-            <div className="flex mx-auto bg-purple-600 self-center p-10 rounded-2xl shadow-lg">
+        <div className="flex h-screen bg-purple-200">
+            <div className="flex mx-auto bg-slate-600 self-center p-10 rounded-2xl shadow-lg">
                 <div className="flex-1">
                     <Image alt="Motivate yourself!" width="500" height="500" src="https://res.cloudinary.com/dgnsgqoi9/image/upload/v1646167222/rally/Rally_copy_rx4xhm.png" />
                 </div>
@@ -39,7 +39,6 @@ const Home = () => {
                 </div>
             </div>
         </div>
-
     )
 }
 

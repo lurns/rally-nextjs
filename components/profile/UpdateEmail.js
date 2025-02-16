@@ -50,7 +50,7 @@ const UpdateEmail = () => {
 					<div className="w-full">
 						<label
 							htmlFor="email"
-							className="flex text-left text-slate-500"	
+							className="flex text-left text-slate-500 pb-1"	
 						>
 								New Email
 						</label>
@@ -58,12 +58,27 @@ const UpdateEmail = () => {
 							type="email" 
 							id="email"
 							name="email"
-							className="border-slate-300 w-full"
+							className="form-input border-1 border-slate-300 bg-slate-100 rounded-lg p-2 w-full"
 							ref={emailRef}
 						/>
 					</div>
 					<div className="flex-none self-end">
-						<button className="ml-5 pt-2 pb-2 pl-5 pr-5 bg-yellow-100 font-bold text-yellow-700 rounded-2xl">Save</button>
+						<button className="
+							transition
+							duration-200
+							ease-in-out
+							ml-5 
+							pt-2 
+							pb-2 
+							pl-5 
+							pr-5
+							bg-orange-50 
+							font-bold 
+							text-yellow-700 
+							rounded-2xl
+							hover:bg-orange-100
+							hover:text-yellow-800
+						">Save</button>
 					</div>
 				</div>
 

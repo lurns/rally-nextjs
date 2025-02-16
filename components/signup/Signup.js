@@ -28,21 +28,21 @@ const Signup = (props) => {
             <h2 className="text-left font-black text-6xl text-purple-500">
                 Sign up
             </h2>
-            <h3 className="mt-3 text-left font-medium italic text-3xl text-slate-300">
+            <h3 className="mt-3 text-left font-medium italic text-3xl text-slate-400">
                 It&apos;s gonna be great!
             </h3>
             <form id="rallySignup" className="mt-10" onSubmit={submitHandler}>
             <div className="flex flex-col mb-3">
                 <label 
                         htmlFor="rallyNick"
-                        className="text-left text-slate-500"
+                        className="text-left text-slate-500 pb-1"
                     >Nickname
                     </label>
                     <input 
                         type="text"
                         name="rallyNick"
                         id="rallyNick"
-                        className="border-slate-300"
+                        className="border-1 border-slate-300 rounded-lg p-1"
                         ref={nicknameRef}
                         required
                     />
@@ -50,14 +50,14 @@ const Signup = (props) => {
                 <div className="flex flex-col mb-3">
                 <label 
                         htmlFor="rallyEmail"
-                        className="text-left text-slate-500"
+                        className="text-left text-slate-500 pb-1"
                     >Email
                     </label>
                     <input 
                         type="email"
                         name="rallyEmail"
                         id="rallyEmail"
-                        className="border-slate-300"
+                        className="border-1 border-slate-300 rounded-lg p-1"
                         ref={emailRef}
                         required
                     />
@@ -65,14 +65,14 @@ const Signup = (props) => {
                 <div className="flex flex-col mb-3">
                     <label 
                         htmlFor="rallyPass"
-                        className="text-left text-slate-500"
+                        className="text-left text-slate-500 pb-1"
                     >Password
                     </label>
                     <input
                         type="password"
                         name="rallyPass"
                         id="rallyPass"
-                        className="border-slate-300"
+                        className="border-1 border-slate-300 rounded-lg p-1"
                         ref={passRef}
                         required
                     />
@@ -80,26 +80,41 @@ const Signup = (props) => {
                 <div className="flex flex-col mb-3">
                     <label 
                         htmlFor="confirmRallyPass"
-                        className="text-left text-slate-500"
+                        className="text-left text-slate-500 pb-1"
                     >Confirm Password
                     </label>
                     <input
                         type="password"
                         name="confirmRallyPass"
                         id="confirmRallyPass"
-                        className="border-slate-300"
+                        className="border-1 border-slate-300 rounded-lg p-1"
                         ref={confirmPassRef}
                         required
                     />
                 </div>
                 <div className="flex flex-col mb-3">
-                    <button type="submit" className="min-w-full mt-5 p-4 bg-purple-500 font-bold text-yellow-200 rounded-2xl shadow-lg">Sign up</button>
+                    <button type="submit" className="
+                        transition 
+                        duration-200 
+                        ease-in-out 
+                        min-w-full
+                        mt-5 
+                        p-4 
+                        bg-purple-500 
+                        font-bold 
+                        text-yellow-200 
+                        rounded-2xl 
+                        shadow-lg
+                        hover:bg-yellow-400
+                        hover:text-purple-600
+                        hover:cursor-pointer
+                    ">Sign up</button>
                 </div>
                 <div>
-                    <p className="italic text-sm text-purple-400">
+                    <p className="italic text-sm text-slate-400 pt-2">
                         Already have an account?&nbsp;
                         <Link href="/">
-                            <span className="underline cursor-pointer">
+                            <span className="underline cursor-pointer text-purple-400">
                                 Log in.        
                             </span>
                         </Link>

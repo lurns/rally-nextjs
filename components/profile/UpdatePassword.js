@@ -54,7 +54,7 @@ const UpdatePassword = () => {
         			<div className="mb-3">
 						<label
 							htmlFor="oldPass"
-							className="flex text-left text-slate-500"	
+							className="flex text-left text-slate-500 pb-1"	
 						>
 								Current Password
 						</label>
@@ -62,14 +62,14 @@ const UpdatePassword = () => {
 							type="password" 
 							id="oldPass"
 							name="oldPass"
-							className="border-slate-300 w-full"
+							className="form-input border-1 border-slate-300 bg-slate-100 rounded-lg p-2 w-full"
 							ref={oldPassRef}
 						/>
 					</div>
 					<div className="mb-3">
 						<label
 							htmlFor="newPass"
-							className="flex text-left text-slate-500"	
+							className="flex text-left text-slate-500 pb-1"	
 						>
 								New Password
 						</label>
@@ -77,14 +77,14 @@ const UpdatePassword = () => {
 							type="password" 
 							id="newPass"
 							name="newPass"
-							className="border-slate-300 w-full"
+							className="form-input border-1 border-slate-300 bg-slate-100 rounded-lg p-2 w-full"
 							ref={newPassRef}
 						/>
 					</div>
 					<div className="mb-3">
 						<label
 							htmlFor="confirmNewPass"
-							className="flex text-left text-slate-500"	
+							className="flex text-left text-slate-500 pb-1"	
 						>
 								Confirm New Password
 						</label>
@@ -92,12 +92,27 @@ const UpdatePassword = () => {
 							type="password" 
 							id="confirmNewPass"
 							name="confirmNewPass"
-							className="border-slate-300 w-full"
+							className="form-input border-1 border-slate-300 bg-slate-100 rounded-lg p-2 w-full"
 							ref={confirmNewPassRef}
 						/>
 					</div>
 					<div className="mb-3">
-						<button className="w-full pt-2 pb-2 pl-5 pr-5 bg-yellow-100 font-bold text-yellow-700 rounded-2xl">Save</button>
+						<button className="
+							transition
+							duration-200
+							ease-in-out
+							w-full 
+							pt-2 
+							pb-2 
+							pl-5 
+							pr-5 
+							bg-orange-50 
+							font-bold 
+							text-yellow-700 
+							rounded-2xl
+							hover:bg-orange-100
+							hover:text-yellow-800
+						">Save</button>
 					</div>
 				</div>
 

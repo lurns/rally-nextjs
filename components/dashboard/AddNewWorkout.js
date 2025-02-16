@@ -1,5 +1,4 @@
 import { useContext, useRef, useState } from "react";
-import classes from './DashHome.module.css';
 import { useAuth } from "../../store/auth-context";
 import ErrorMessage from '../../components/ui/ErrorMessage';
 import SuccessMessage from "../ui/SuccessMessage";
@@ -63,7 +62,7 @@ const AddNewWorkout = () => {
 	}
 
 	return (
-		<div className={classes}>
+		<div>
 			<h3 className="font-black text-3xl text-sky-900">
 				Add New Workout
 			</h3>
@@ -91,8 +90,7 @@ const AddNewWorkout = () => {
 					className="text-slate-500"
 				>Duration
 				</label>
-				{/* TODO: snap to ranges, change the range slider color */}
-				<div id={classes.rangeInput}>
+				<div>
 					<input
 						type="range"
 						className="
@@ -103,8 +101,10 @@ const AddNewWorkout = () => {
 							p-0
 							mt-4
 							mb-2
-							border-3 border-slate-400 rounded-lg
-							focus:outline-none focus:ring-0 focus:shadow-none
+							border-3 
+							border-slate-400 
+							rounded-lg
+							accent-(--color-slate-600)
 						"
 						id="workoutDuration"
 						name="workoutDuration"
@@ -115,7 +115,7 @@ const AddNewWorkout = () => {
 						defaultValue="1"
 						required
 					/>
-					<output id="rangeDuration" className="font-black text-1xl pt-5 text-sky-700">
+					<output id="rangeDuration" className="font-black text-1xl pt-5 text-slate-600">
 						
 					</output>
 				</div>
