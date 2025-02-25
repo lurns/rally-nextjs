@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
       // sort by most recent
       workouts.sort((a, b) => {
-        return b.workout.date - a.workout.date;
+        return new Date(b.workout.date) - new Date(a.workout.date);
       });
 
       client.close();

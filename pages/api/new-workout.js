@@ -7,7 +7,6 @@ export default async function handler (req, res) {
     if (req.method === 'POST' && req.body.workout_type && req.body.duration) {
         try {
 			const date = new Date();
-			console.log('date is ' + date);
 			
 			const workout = {
 				workout_type: req.body.workout_type,
@@ -25,8 +24,6 @@ export default async function handler (req, res) {
 
 			// return new workouts
 			const addedWorkout = await workoutsCollection.findOne({ "_id": saveWorkout.insertedId });
-			console.log(addedWorkout)
-
 			client.close();
 
 			await res.status(201).json(addedWorkout);

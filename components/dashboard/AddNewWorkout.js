@@ -5,7 +5,7 @@ import SuccessMessage from "../ui/SuccessMessage";
 import { useRouter } from "next/router";
 import { WorkoutContext } from "../../store/workout-context";
 
-const AddNewWorkout = () => {
+const AddNewWorkout = (props) => {
 	const [error, setError] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -49,7 +49,8 @@ const AddNewWorkout = () => {
 				// update workouts, add newest to beginning
 				setWorkouts((current) => [data, ...current]);
 
-				router.push('/dash');  
+				props.closeModal ? props.closeModal() : router.push('/dash');  
+
 			} else {
 				setLoading(false);
 				setError(true);
