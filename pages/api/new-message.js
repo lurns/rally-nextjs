@@ -26,7 +26,7 @@ export default async function handler (req, res) {
 
 			client.close();
 
-			await res.status(201).json({message: 'new message added'});
+			await res.send({ _id: savedMessage.insertedId, message });
             
         } catch (e) {
             console.log('error ', e);

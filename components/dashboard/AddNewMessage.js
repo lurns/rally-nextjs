@@ -3,8 +3,9 @@ import { useAuth } from "../../store/auth-context";
 import ErrorMessage from '../../components/ui/ErrorMessage';
 import SuccessMessage from "../ui/SuccessMessage";
 import { useRouter } from "next/router";
+import { DO_BETTER, DO_BETTER_ER, MessageType, MOTIVATIONAL, ON_TRACK } from "../../constants/messageType";
 
-const AddNewMessage = () => {
+const AddNewMessage = (props) => {
 	const [error, setError] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -42,7 +43,8 @@ const AddNewMessage = () => {
 				setLoading(false);
 				document.getElementById('messageBody').value = '';
 				setSuccess(true);
-				router.push('/dash');  
+				props.setMessages((current) => [data, ...current]);
+				props.closeModal ? props.closeModal() : router.push('/dash');
 			} else {
 				setLoading(false);
 				setError(true);
@@ -70,10 +72,10 @@ const AddNewMessage = () => {
 					ref={messageTypeRef}
 					required
 				>
-					<option value="ON_TRACK">On track</option>
-					<option value="MOTIVATIONAL">Motivational</option>
-					<option value="DO_BETTER">Could be better...</option>
-					<option value="DO_BETTER_ER">Get out there!</option>
+					<option value={ON_TRACK}>{MessageType.ON_TRACK}</option>
+					<option value={MOTIVATIONAL}>{MessageType.MOTIVATIONAL}</option>
+					<option value={DO_BETTER}>{MessageType.DO_BETTER}</option>
+					<option value={DO_BETTER_ER}>{MessageType.DO_BETTER_ER}</option>
 				</select>
 			</div>
 			<div className="flex flex-col mb-3">
