@@ -28,30 +28,31 @@ export default async function handler (req, res) {
 			// get a random message / send default
 			if (messages.length === 0) {
 				if (messageType === 'ON_TRACK') {
-					await res.status(200).json({ message: `I'm doing great!` });
+					return res.status(200).json({ message: `I'm doing great!` });
 				} else if (messageType === 'MOTIVATIONAL') {
-					await res.status(200).json({ message: `It's about time to get back out there` });
+					return res.status(200).json({ message: `It's about time to get back out there` });
 				} else if (messageType === 'DO_BETTER') {
-					await res.status(200).json({ message: `Liiiiiiike any day now` });
+					return res.status(200).json({ message: `Liiiiiiike any day now` });
 				} else {
-					await res.status(200).json({ message: `Never give up, never surrender!` });
+					return res.status(200).json({ message: `Never give up, never surrender!` });
 				}
 			}
 
 			// only one entry
 			if (messages.length === 1) {
-				await res.status(201).json({ message: messages[0].message.message_body });
+				return res.status(201).json({ message: messages[0].message.message_body });
 			}
 
 			// choose random
 			if (messages.length > 1) {
-				await res.status(201).json(messages);
+				const index = Math.floor(Math.random() * messages.length);
+				return res.status(201).json({ message: messages[index].message.message_body });
 			}
 
             
         } catch (e) {
             console.log('error ', e);
-			await res.status(403).json({error: 'unable to get message'});
+						return res.status(403).json({error: 'unable to get message'});
         }
     } 
 }

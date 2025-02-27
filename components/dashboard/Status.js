@@ -6,6 +6,7 @@ import UploadNewPic from "../ui/UploadNewPic";
 import { WorkoutContext } from "../../store/workout-context";
 import { DateTime } from "luxon";
 import { server } from "../../lib/config";
+import ErrorMessage from "../ui/ErrorMessage";
 
 const timePassed = (lastWorkout) => {
 	const currentDate = DateTime.fromJSDate(new Date());
@@ -28,7 +29,6 @@ const fetchMessage = async (messageType) => {
 		return response.json();
 
 	} catch (e) {
-		console.log('error fetching message');
 		console.log('error ', e);
 	}
 }
@@ -37,6 +37,7 @@ const Status = () => {
 	const { auth, user, setUser } = useAuth();
 	const { workouts } = useContext(WorkoutContext);
 	const [message, setMessage] = useState('');
+	const [error, setError] = useState('');
 
 	useEffect(() => {
 		if (localStorage.getItem('rally_storage') !== '') {
@@ -68,6 +69,8 @@ const Status = () => {
 			fetchMessage(messageType)
 				.then(res => {
 					setMessage(res)
+			}).catch(e => {
+				setError('Error finding messages.')
 			});
 		}
 
@@ -78,7 +81,8 @@ const Status = () => {
 			<h3 className="font-black text-4xl text-yellow-500 bg-yellow-900 w-fit p-2">
 				Hey, { user?.user?.nickname }!
 			</h3>
-			<MessageBubble message={message?.message ? message.message : ''} />
+			{ error && <ErrorMessage message={error} />}
+			<MessageBubble message={message?.message ?? ''} />
 			<UserPic />
 			<UploadNewPic />
 		</div>
