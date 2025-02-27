@@ -113,7 +113,7 @@ export const UploadNewPic = (props) => {
 					file:rounded-full file:border-0
 					file:text-sm file:font-semibold
 					file:bg-orange-50 file:text-orange-700 file:delay-150
-					hover:file:bg-orange-100 file:transition file:ease-in-out"
+					hover:file:bg-orange-100 hover:file:cursor-pointer file:transition file:ease-in-out"
 					id="uploadNewPic"
 					name="uploadNewPic"
 				/>
@@ -137,6 +137,7 @@ export const UploadNewPic = (props) => {
 						rounded-2xl 
 						shadow-lg
 						disabled:bg-slate-400
+						hover:cursor-pointer
 					"
 					disabled={loading ? true : false}
 				>

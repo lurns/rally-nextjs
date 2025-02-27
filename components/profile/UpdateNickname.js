@@ -78,6 +78,7 @@ const UpdateNickname = () => {
 							rounded-2xl
 							hover:bg-orange-100
 							hover:text-yellow-800
+							hover:cursor-pointer
 							">Save</button>
 					</div>
 				</div>
