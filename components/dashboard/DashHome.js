@@ -8,9 +8,6 @@ import { useContext } from "react";
 import WeeklyGoal from "./WeeklyGoal";
 
 const DashHome =  () => {
-    const { auth } = useAuth();
-    const { workouts } = useContext(WorkoutContext);
-
     return (
         <div className="bg-slate-700 pt-5 pb-5">
             <div className="flex mx-auto w-3/4 bg-slate-200 self-center p-10 rounded-2xl shadow-lg">

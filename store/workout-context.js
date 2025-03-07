@@ -4,34 +4,27 @@ import { server } from "../lib/config";
 
 export const WorkoutContext = createContext({});
 
-export const getWorkouts = async () => {
-  try {
-    const response = await fetch(`${server}api/workouts`, {
-      method: "GET",
-    });
-
-    const res = await response.json();
-    return res;
-  } catch (e) {
-    console.log("error ", e);
-  }
-};
-
 export const WorkoutProvider = (props) => {
   const [workouts, setWorkouts] = useState([]);
 
-  useEffect(() => {
-    async function fetcher() {
-      await getWorkouts().then((res) => {
-        setWorkouts(res);
-      });
+  const getWorkouts = async () => {
+    try {
+      const response = await fetch(`${server}api/workouts`);
+      const data = await response.json();
+      setWorkouts(data); // Store workouts in context
+    } catch (error) {
+      console.error("Error fetching workouts:", error);
     }
+  };
 
-    fetcher();
-  }, [setWorkouts]);
+  useEffect(() => {
+    if (workouts.length === 0 && localStorage.getItem('rally_storage') === '') {
+      getWorkouts();
+    }
+  }, []);
 
   return (
-    <WorkoutContext.Provider value={{ workouts, setWorkouts }}>
+    <WorkoutContext.Provider value={{ workouts, setWorkouts, getWorkouts }}>
       {props.children}
     </WorkoutContext.Provider>
   );

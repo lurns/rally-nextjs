@@ -8,7 +8,7 @@ const workoutsOfTheWeek = (workouts) => {
 	const weekRange = currentWeek(today);
 
 	// filter within date range
-	const results = workouts.filter((workout) => {
+	const results = workouts?.filter((workout) => {
 		var workoutDate = new Date(workout.workout.date);
 		return workoutDate >= weekRange.begin && workoutDate <= weekRange.end
 	});
@@ -24,16 +24,16 @@ const WeeklyGoal = () => {
 
 	useEffect(() => {
 		setWeekWorkouts(workoutsOfTheWeek(workouts))
-		setGoalProgress(weekWorkouts.length);
+		setGoalProgress(weekWorkouts?.length);
 
 		// style goal marker for completed workouts
-		for (var i = 1; i <= weekWorkouts.length && i <= goal; i++) {
+		for (var i = 1; i <= weekWorkouts?.length && i <= goal; i++) {
 			var goalDiv = document.getElementById('goal' + i);
 			goalDiv.classList.remove('bg-slate-500');
 			goalDiv.classList.add('bg-green-300')
 		}
 
-	}, [workouts, weekWorkouts.length]);
+	}, [workouts, weekWorkouts?.length]);
 
 	return (
 		<div className="mx-auto bg-slate-700 self-center mt-5 mr-5 p-5 rounded-2xl shadow-lg">

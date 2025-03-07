@@ -46,7 +46,7 @@ const Status = () => {
 	}, [auth, setUser]);
 
 	useEffect(() => {
-		if (workouts[0]) {
+		if (workouts && workouts[0]) {
 			const hours = timePassed(workouts[0].workout);
 			let messageType = '';
 
