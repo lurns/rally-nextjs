@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import ErrorMessage from "./ErrorMessage";
-import SuccessMessage from "./SuccessMessage";
+import MessageBanner from "./MessageBanner";
 import { useAuth } from "../../store/auth-context";
 import { fileTypes } from "../../constants/fileTypes";
+import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../constants/messageBannerType";
 
 export const UploadNewPic = (props) => {
   const [loading, setLoading] = useState(false);
@@ -104,8 +104,8 @@ export const UploadNewPic = (props) => {
 
   return (
     <div className="align-content-center bg-slate-100 rounded-2xl mt-3 mb-3 mr-5 p-3">
-      {!loading && error ? <ErrorMessage message={error} /> : ""}
-      {!loading && success ? <SuccessMessage message="Photo updated." /> : ""}
+      {!loading && error ? <MessageBanner type={ERROR_MESSAGE} message={error} /> : ""}
+      {!loading && success ? <MessageBanner type={SUCCESS_MESSAGE} message="Photo updated." /> : ""}
       <form
         id="uploadNewPicForm"
         className="mt-5"

@@ -6,7 +6,8 @@ import UploadNewPic from "../ui/UploadNewPic";
 import { WorkoutContext } from "../../store/workout-context";
 import { DateTime } from "luxon";
 import { server } from "../../lib/config";
-import ErrorMessage from "../ui/ErrorMessage";
+import MessageBanner from "../ui/MessageBanner";
+import { ERROR_MESSAGE } from "../../constants/messageBannerType";
 
 const timePassed = (lastWorkout) => {
 	const currentDate = DateTime.fromJSDate(new Date());
@@ -81,7 +82,7 @@ const Status = () => {
 			<h3 className="font-black text-4xl text-yellow-500 bg-yellow-900 w-fit p-2">
 				Hey, { user?.user?.nickname }!
 			</h3>
-			{ error && <ErrorMessage message={error} />}
+			{ error && <MessageBanner type={ERROR_MESSAGE} message={error} />}
 			<MessageBubble message={message?.message ?? ''} />
 			<UserPic />
 			<UploadNewPic />

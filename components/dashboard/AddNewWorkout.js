@@ -1,9 +1,9 @@
 import { useContext, useRef, useState } from "react";
 import { useAuth } from "../../store/auth-context";
-import ErrorMessage from '../../components/ui/ErrorMessage';
-import SuccessMessage from "../ui/SuccessMessage";
+import MessageBanner from "../ui/MessageBanner";
 import { useRouter } from "next/router";
 import { WorkoutContext } from "../../store/workout-context";
+import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../constants/messageBannerType";
 
 const AddNewWorkout = (props) => {
 	const [error, setError] = useState(false);
@@ -67,8 +67,8 @@ const AddNewWorkout = (props) => {
 			<h3 className="font-black text-3xl text-sky-900">
 				Add New Workout
 			</h3>
-			{error && !loading ? <ErrorMessage message="Error adding workout" /> : ''}
-			{success && !loading ? <SuccessMessage message="Workout added!" /> : ''}
+			{error && !loading ? <MessageBanner type={ERROR_MESSAGE} message="Error adding workout" /> : ''}
+			{success && !loading ? <MessageBanner type={SUCCESS_MESSAGE} message="Workout added!" /> : ''}
 			<form id="addNewWorkoutForm" className="mt-5" onSubmit={submitWorkoutHandler}>
 			<div className="flex flex-col mb-3">
 				<label 

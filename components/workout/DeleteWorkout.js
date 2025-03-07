@@ -1,16 +1,14 @@
 import { useContext, useState, useEffect } from "react";
-import { useAuth } from "../../store/auth-context";
-import ErrorMessage from '../../components/ui/ErrorMessage';
 import { WorkoutContext } from "../../store/workout-context";
 import { formatDateMDY } from "../../lib/formatDate";
+import MessageBanner from "../ui/MessageBanner";
+import { ERROR_MESSAGE } from "../../constants/messageBannerType";
 
 const DeleteWorkout = (props) => {
   const [workoutId, setWorkoutId] = useState('')
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { workouts, setWorkouts } = useContext(WorkoutContext);
-
-  const { auth, user, setUser } = useAuth();
 
   useEffect(() => {
     setWorkoutId(props.workout._id);
@@ -20,17 +18,20 @@ const DeleteWorkout = (props) => {
     event.preventDefault();
     setLoading(true);
 
-    const response = await fetch('/api/delete-workout', {
-      method: 'DELETE',
-      body: JSON.stringify({ id: workoutId }),
-      headers: {
-        'Content-Type': 'application/json'
+    try {
+      const response = await fetch('/api/delete-workout', {
+        method: 'DELETE',
+        body: JSON.stringify({ id: workoutId }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete workout");
       }
-    });
-  
-    const data = await response.json();
-  
-    if (!data.error) {
+
       setLoading(false);
 
       // rm from workout context
@@ -39,9 +40,9 @@ const DeleteWorkout = (props) => {
       });
 
       props.closeModal()
-    } else {
+    } catch (e) {
       setLoading(false);
-      setError(true);
+      setError(e.message);
     }
   }
 
@@ -50,7 +51,7 @@ const DeleteWorkout = (props) => {
       <h3 className="font-black text-3xl text-red-900">
         Delete Workout
       </h3>
-      {error && !loading ? <ErrorMessage message="Error deleting workout" /> : ''}
+      {error && !loading ? <MessageBanner type={ERROR_MESSAGE} message={error} /> : ''}
       <p className="text-center mt-5">
         Are you sure you want to delete <br/> 
         <strong>{props.workout.workout.workout_type}</strong>
@@ -77,7 +78,10 @@ const DeleteWorkout = (props) => {
             "
             disabled={loading ? true : false}
           >
-            Delete it!
+            {loading ? 
+              <span className="animate-spin material-icons-outlined">progress-activity</span>
+               : "Delete it!" 
+            }
           </button>
         </div>
       </form>

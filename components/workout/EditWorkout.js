@@ -1,8 +1,9 @@
 import { useContext, useRef, useState, useEffect } from "react";
 import { useAuth } from "../../store/auth-context";
-import ErrorMessage from '../../components/ui/ErrorMessage';
 import { WorkoutContext } from "../../store/workout-context";
 import { formatDateYYYYMMDD, formatDbDate, formatTimeHHMM } from "../../lib/formatDate";
+import MessageBanner from "../ui/MessageBanner";
+import { ERROR_MESSAGE } from "../../constants/messageBannerType";
 
 const EditWorkout = (props) => {
   const [selectedDate, setSelectedDate] = useState('2000-01-01');
@@ -86,7 +87,7 @@ const EditWorkout = (props) => {
       <h3 className="font-black text-3xl text-sky-900">
         Edit Workout
       </h3>
-      {error && !loading ? <ErrorMessage message="Error updating workout" /> : ''}
+      {error && !loading ? <MessageBanner type={ERROR_MESSAGE} message="Error updating workout" /> : ''}
       <form id="editWorkoutForm" className="mt-5" onSubmit={submitWorkoutHandler}>
         <div className="flex flex-col mb-3">
           <label 

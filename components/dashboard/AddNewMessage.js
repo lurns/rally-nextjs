@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { useAuth } from "../../store/auth-context";
-import ErrorMessage from "../../components/ui/ErrorMessage";
-import SuccessMessage from "../ui/SuccessMessage";
+import MessageBanner from "../ui/MessageBanner";
 import { useRouter } from "next/router";
 import {
   DO_BETTER,
@@ -10,6 +9,7 @@ import {
   MOTIVATIONAL,
   ON_TRACK,
 } from "../../constants/messageType";
+import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../constants/messageBannerType";
 
 const AddNewMessage = (props) => {
   const [error, setError] = useState(false);
@@ -60,8 +60,8 @@ const AddNewMessage = (props) => {
   return (
     <div>
       <h3 className="font-black text-3xl text-sky-900">Add New Message</h3>
-      {error && !loading ? <ErrorMessage message="Error adding message" /> : ""}
-      {success && !loading ? <SuccessMessage message="Message added!" /> : ""}
+      {error && !loading ? <MessageBanner type={ERROR_MESSAGE} message="Error adding message" /> : ""}
+      {success && !loading ? <MessageBanner type={SUCCESS_MESSAGE} message="Message added!" /> : ""}
       <form
         id="addNewMessageForm"
         className="mt-5"

@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useAuth } from "../../store/auth-context";
-import ErrorMessage from "../ui/ErrorMessage";
-import SuccessMessage from "../ui/SuccessMessage";
+import MessageBanner from "../ui/MessageBanner";
+import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../constants/messageBannerType";
 
 const UpdateEmail = () => {
 	const { auth, user, setUser } = useAuth();
@@ -43,8 +43,8 @@ const UpdateEmail = () => {
 
 	return (
 		<>
-			{ error && <ErrorMessage message="Error updating email." />}
-			{ success && <SuccessMessage message="Email updated." /> }
+			{ error && <MessageBanner type={ERROR_MESSAGE} message="Error updating email." />}
+			{ success && <MessageBanner type={SUCCESS_MESSAGE} message="Email updated." /> }
 			<form id="updateEmail" className="mt-5" onSubmit={submitHandler}>
 				<div className="flex flex-nowrap">
 					<div className="w-full">

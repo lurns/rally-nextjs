@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { useAuth } from "../../store/auth-context";
-import ErrorMessage from "../ui/ErrorMessage";
 import { MessageType } from "../../constants/messageType";
+import MessageBanner from "../ui/MessageBanner";
+import { ERROR_MESSAGE } from "../../constants/messageBannerType";
 
 const EditMessage = (props) => {
   const [messageId, setmessageId] = useState("");
@@ -59,7 +60,7 @@ const EditMessage = (props) => {
     <div>
       <h3 className="font-black text-3xl text-sky-900">Edit message</h3>
       {error && !loading ? (
-        <ErrorMessage message="Error updating message" />
+        <MessageBanner type={ERROR_MESSAGE} message="Error updating message" />
       ) : (
         ""
       )}

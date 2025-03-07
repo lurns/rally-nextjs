@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useAuth } from "../../store/auth-context";
-import ErrorMessage from "../ui/ErrorMessage";
-import SuccessMessage from "../ui/SuccessMessage";
+import MessageBanner from "../ui/MessageBanner";
+import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../constants/messageBannerType";
 
 const UpdatePassword = () => {
 	const { auth, user, setUser } = useAuth();
@@ -47,8 +47,8 @@ const UpdatePassword = () => {
 
 	return (
 		<>
-			{ error && <ErrorMessage message="Error updating password." />}
-			{ success && <SuccessMessage message="Password updated." /> }
+			{ error && <MessageBanner type={ERROR_MESSAGE} message="Error updating password." />}
+			{ success && <MessageBanner type={SUCCESS_MESSAGE} message="Password updated." /> }
 			<form id="updatePassword" className="mt-5" onSubmit={submitHandler}>
 				<div className="flex flex-col">
         			<div className="mb-3">

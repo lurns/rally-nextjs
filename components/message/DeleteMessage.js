@@ -1,11 +1,12 @@
-import { useContext, useState, useEffect } from "react";
-import { useAuth } from "../../store/auth-context";
-import ErrorMessage from '../../components/ui/ErrorMessage';
+import { useState, useEffect } from "react";
 import { formatDateMDY } from "../../lib/formatDate";
+import 'material-icons/iconfont/material-icons.css';
+import MessageBanner from "../ui/MessageBanner";
+import { ERROR_MESSAGE } from "../../constants/messageBannerType";
 
 const DeleteMessage = (props) => {
   const [messageId, setMessageId] = useState('')
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -16,17 +17,15 @@ const DeleteMessage = (props) => {
     event.preventDefault();
     setLoading(true);
 
-    const response = await fetch('/api/delete-message', {
-      method: 'DELETE',
-      body: JSON.stringify({ id: messageId }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-  
-    const data = await response.json();
-  
-    if (!data.error) {
+    try {
+      await fetch('/api/delete-message', {
+        method: 'DELETE',
+        body: JSON.stringify({ id: messageId }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
       setLoading(false);
 
       // rm from message state
@@ -35,9 +34,9 @@ const DeleteMessage = (props) => {
       });
 
       props.closeModal()
-    } else {
+    } catch (e) {
       setLoading(false);
-      setError(true);
+      setError("Unable to delete message");
     }
   }
 
@@ -46,7 +45,7 @@ const DeleteMessage = (props) => {
       <h3 className="font-black text-3xl text-red-900">
         Delete Message
       </h3>
-      {error && !loading ? <ErrorMessage message="Error deleting message" /> : ''}
+      {error && !loading ? <MessageBanner type={ERROR_MESSAGE} message={error} /> : ''}
       <p className="text-center mt-5">
         Are you sure you want to delete <br/> 
         <strong>{props.message.message.message_body}</strong>
@@ -73,7 +72,10 @@ const DeleteMessage = (props) => {
             "
             disabled={loading ? true : false}
           >
-            Delete it!
+            {loading ? 
+              <span className="animate-spin material-icons-outlined">progress-activity</span>
+               : "Delete it!" 
+            }
           </button>
         </div>
       </form>

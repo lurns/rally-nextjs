@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from "react";
-import { useAuth } from "../../store/auth-context";
-import ErrorMessage from "../ui/ErrorMessage";
+import { useContext, useState } from "react";
 import { formatDateMDY } from "../../lib/formatDate";
 import { WorkoutContext } from "../../store/workout-context";
+import MessageBanner from "../ui/MessageBanner";
+import { ERROR_MESSAGE } from "../../constants/messageBannerType";
 
 const SingleWorkout = () => {
   const [error, setError] = useState(false);
@@ -19,7 +19,7 @@ const SingleWorkout = () => {
 					</h4>
 				</div>
 			} */}
-      {error && !loading && <ErrorMessage message="Error finding last workout" />}
+      {error && !loading && <MessageBanner type={ERROR_MESSAGE} message="Error finding last workout" />}
       {workouts[0] && (
         <div className="mx-auto bg-slate-500 self-center mt-5 mr-5 p-5 rounded-2xl shadow-lg">
           <h4 className="text-left font-black text-2xl text-white mb-2">Last workout</h4>
