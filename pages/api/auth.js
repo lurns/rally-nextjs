@@ -3,10 +3,12 @@ import { getIronSession } from 'iron-session';
 import { ironOptions } from '../../lib/config';
 
 export default async function handler (req, res) {
+	const session = await getIronSession(req, res, ironOptions)
+	let client;
+
+	// find user
 	try {
-		// find user
-		const session = await getIronSession(req, res, ironOptions)
-		const client = await MongoClient.connect(process.env.MONGO_CONNECT);
+		client = await MongoClient.connect(process.env.MONGO_CONNECT);
 		const db = client.db();
 
 		const usersCollection = db.collection('users');
@@ -17,12 +19,12 @@ export default async function handler (req, res) {
 
 		const userDb = await cursor.toArray();
 
-		await client.close();
-		return await res.json(userDb[0]);
-		
+		return res.status(200).json(userDb[0]);
 	} catch (e) {
 		console.log('err retrieving user');
-		console.log(e)
-		return null;
-	}
+    console.log(e);
+    return res.status(500).json({ error: "Internal Server Error" });
+	} finally {
+    if (client) client.close();
+  }
 }

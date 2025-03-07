@@ -14,7 +14,7 @@ const UpdateNickname = () => {
 		e.preventDefault();
 
 		const response = await fetch('/api/update-nickname', {
-			method: 'POST',
+			method: 'PUT',
 			body: JSON.stringify({nickname_input: nicknameRef.current.value}),
 			headers: {
 				'Content-Type': 'application/json'

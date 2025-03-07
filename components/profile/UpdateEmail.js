@@ -14,7 +14,7 @@ const UpdateEmail = () => {
 		e.preventDefault();
 
 		const response = await fetch('/api/update-email', {
-			method: 'POST',
+			method: 'PUT',
 			body: JSON.stringify({email_input: emailRef.current.value}),
 			headers: {
 				'Content-Type': 'application/json'

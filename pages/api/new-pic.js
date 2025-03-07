@@ -1,39 +1,42 @@
-import { MongoClient, ObjectId } from 'mongodb';
-import bcrypt from 'bcrypt';
-import { getIronSession } from 'iron-session';
-import { ironOptions } from '../../lib/config';
+import { MongoClient, ObjectId } from "mongodb";
+import { getIronSession } from "iron-session";
+import { ironOptions } from "../../lib/config";
 
-export default async function handler (req, res) {
-	const session = await getIronSession(req, res, ironOptions)
-    if (req.method === 'POST' && req.body.pic_url) {
-        // make sure user matches in db
-        try {
-            // find user
-            const client = await MongoClient.connect(process.env.MONGO_CONNECT);
-            const db = client.db();
-			const id = session.user.id;
+export default async function handler(req, res) {
+  const session = await getIronSession(req, res, ironOptions);
 
-            const usersCollection = db.collection('users');
-			const userDb = await usersCollection.findOne({"_id": new ObjectId(id)});
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed." });
+  }
 
-			// if user found, attach pic
-			if (userDb) {
-				await usersCollection.updateOne({"_id": new ObjectId(id)}, {
-					$set: {"user.pic_url": req.body.pic_url}
-				});
+  if (!req.body.pic_url) {
+    return res.status(400).json({ error: "Incomplete request body (no picture attached)." });
+  }
 
-				client.close();
+  let client;
+  try {
+    client = await MongoClient.connect(process.env.MONGO_CONNECT);
+    const db = client.db();
+    const userId = session.user.id;
 
-				await res.json({message: 'Updated photo in db.'});
-				res.end();
-			} else {
-				throw new Error;
-			}
-        } catch (e) {
-			// give err
-			console.log('in api/new-pic')
-            console.log('error ', e);
-			await res.status(403).json({error: 'User not found.'});
-        }
-    } 
+    const usersCollection = db.collection("users");
+    const userDb = await usersCollection.findOne({ _id: new ObjectId(userId) });
+
+    if (!userDb) return res.status(404).json({ error: "Unable to find user." });
+
+    // attach pic
+    await usersCollection.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $set: { "user.pic_url": req.body.pic_url },
+      }
+    );
+
+    return res.status(201).json({ message: "Updated photo in db." });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    if (client) client.close();
+  }
 }

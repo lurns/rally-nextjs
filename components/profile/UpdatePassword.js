@@ -23,7 +23,7 @@ const UpdatePassword = () => {
 		}
 
 		const response = await fetch('/api/update-password', {
-			method: 'POST',
+			method: 'PUT',
 			body: JSON.stringify(passData),
 			headers: {
 				'Content-Type': 'application/json'

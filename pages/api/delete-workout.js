@@ -1,30 +1,34 @@
-import { MongoClient, ObjectId } from 'mongodb';
-import { getIronSession } from 'iron-session';
-import { ironOptions } from '../../lib/config';
+import { MongoClient, ObjectId } from "mongodb";
+import { getIronSession } from "iron-session";
+import { ironOptions } from "../../lib/config";
 
-export default async function handler (req, res) {
+export default async function handler(req, res) {
   const session = await getIronSession(req, res, ironOptions);
+  let client;
 
-  if (req.method === "DELETE" && session.user) {
-    try {
-      const client = await MongoClient.connect(process.env.MONGO_CONNECT);
-      const db = client.db();
+  if (req.method !== "DELETE") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-      const workoutsCollection = db.collection("workouts");
-      const workoutDb = await workoutsCollection.deleteOne(
-				{ "_id": new ObjectId(req.body.id) }
-      );
+  try {
+    client = await MongoClient.connect(process.env.MONGO_CONNECT);
+    const db = client.db();
+    const workoutsCollection = db.collection("workouts");
 
-      client.close();
+    const deleteQuery = {
+      _id: new ObjectId(req.body.id),
+      "workout.user_id": session.user.id,
+    };
 
-			// check if successful
-			if (workoutDb) {
-				await res.send(workoutDb);
-			} else {
-				await res.status(403).json({error: 'Unable to delete workout.'});
-			}
-    } catch (e) {
-      console.log("error ", e);
-    }
+    const workoutDb = await workoutsCollection.deleteOne(deleteQuery);
+
+    if (workoutDb.deletedCount === 1) return res.status(200).end();
+
+    return res.status(404).json({ error: "Unable to delete workout." });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    if (client) client.close();
   }
 }

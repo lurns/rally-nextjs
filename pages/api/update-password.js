@@ -1,59 +1,71 @@
-import { MongoClient, ObjectId } from 'mongodb';
-import bcrypt from 'bcrypt';
-import { getIronSession } from 'iron-session'
-import { ironOptions } from '../../lib/config';
+import { MongoClient, ObjectId } from "mongodb";
+import bcrypt from "bcrypt";
+import { getIronSession } from "iron-session";
+import { ironOptions } from "../../lib/config";
 
-export default async function handler (req, res) {
-	const session = await getIronSession(req, res, ironOptions)
-    if (req.method === 'POST' && req.body.oldPass && req.body.newPass &&  req.body.confirmNewPass && session.user) {
-        try {
-			// make sure passwords match
-			if (req.body.newPass !== req.body.confirmNewPass) {
-				throw new Error();
-			}
+const validateRequest = (oldPass, newPass, confirmNewPass) => {
+  if (!oldPass || !newPass || !confirmNewPass)
+    return "Incomplete request body.";
 
-            const client = await MongoClient.connect(process.env.MONGO_CONNECT);
-            const db = client.db();
+  if (newPass !== confirmNewPass) return "Passwords do not match.";
 
-            const usersCollection = db.collection('users');
+  return null;
+};
 
-			// make sure old password matches one in db
-			const userDb = await usersCollection.findOne({"_id": new ObjectId(session.user.id)});
+export default async function handler(req, res) {
+  const session = await getIronSession(req, res, ironOptions);
+  let client;
 
-			if (userDb) {
-				var result = await bcrypt.compare(req.body.oldPass, userDb.user.password);
+  if (req.method !== "PUT") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-				// set new password
-				if (result) {
-					bcrypt.genSalt(10, async (err, salt) => {
-						bcrypt.hash(req.body.newPass, salt, async (err, hash) => {
-							const setUserPassDb = await usersCollection.updateOne(
-								{ "_id": new ObjectId(session.user.id) },
-								{ 
-									$set: { "user.password": hash }
-							});
+  // validations
+  const { oldPass, newPass, confirmNewPass } = req.body;
+  const validationError = validateRequest(oldPass, newPass, confirmNewPass);
 
-							client.close();
+  if (validationError) return res.status(400).json({ error: validationError });
 
-							if (setUserPassDb.modifiedCount === 1) {
-								await res.send(JSON.stringify({ success: 'success'}));
-							} else {
-								throw new Error();
-							}
-						});
-					})
-				}
-			} else {
-				client.close();
-				throw new Error();
-			}
-     
-        } catch (e) {
-			console.log('in update-nickname.js')
-            console.log('error ', e);
-			await res.status(403).json({error: 'Unable to update nickname.'});
-        }
-    } else {
-		await res.status(403).json({error: 'User not found.'});
-	}
+  try {
+    client = await MongoClient.connect(process.env.MONGO_CONNECT);
+    const db = client.db();
+
+    const usersCollection = db.collection("users");
+
+    // get user
+    const userDb = await usersCollection.findOne({
+      _id: new ObjectId(session.user.id),
+    });
+
+    if (!userDb) return res.status(404).json({ error: "User not found." });
+
+    // make sure old password matches one in db
+    var result = await bcrypt.compare(req.body.oldPass, userDb.user.password);
+
+    if (!result)
+      return res
+        .status(400)
+        .json({ error: "Incorrect input for current password" });
+
+    // set new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPass, salt);
+
+    const setUserPassDb = await usersCollection.updateOne(
+      { _id: new ObjectId(session.user.id) },
+      {
+        $set: { "user.password": hashedPassword },
+      }
+    );
+
+    if (setUserPassDb.modifiedCount === 1)
+      return res.status(200).send(JSON.stringify({ success: "success" }));
+
+    return res.status(404).json({ error: "Unable to update password." });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    if (client) client.close();
+  }
 }

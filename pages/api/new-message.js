@@ -4,32 +4,38 @@ import { ironOptions } from "../../lib/config";
 
 export default async function handler(req, res) {
   const session = await getIronSession(req, res, ironOptions);
-  if (req.method === "POST" && req.body.message_type && req.body.message_body) {
-    try {
-      const date = new Date();
+  let client;
+  
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed." });
+  }
 
-      const message = {
-        message_type: req.body.message_type,
-        message_body: req.body.message_body,
-        user_id: req.body.user_id, // or req.session
-        date: date,
-      };
+  if (!req.body.message_type || !req.body.message_body) {
+    return res.status(400).json({ error: "Incomplete request body." });
+  }
 
-      // add to db
-      const client = await MongoClient.connect(process.env.MONGO_CONNECT);
-      const db = client.db();
+  try {
+    const date = new Date();
 
-      const messagesCollection = db.collection("messages");
-      const savedMessage = await messagesCollection.insertOne({ message });
+    const message = {
+      message_type: req.body.message_type,
+      message_body: req.body.message_body,
+      user_id: session.user.id,
+      date: date,
+    };
 
-      console.log(savedMessage);
+    // add to db
+    client = await MongoClient.connect(process.env.MONGO_CONNECT);
+    const db = client.db();
 
-      client.close();
+    const messagesCollection = db.collection("messages");
+    const savedMessage = await messagesCollection.insertOne({ message });
 
-      await res.send({ _id: savedMessage.insertedId, message });
-    } catch (e) {
-      console.log("error ", e);
-      await res.status(403).json({ error: "unable to add message" });
-    }
+    return res.status(201).send({ _id: savedMessage.insertedId, message });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    if (client) client.close();
   }
 }

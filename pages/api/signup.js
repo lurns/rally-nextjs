@@ -1,38 +1,63 @@
-import { MongoClient, ObjectId } from 'mongodb';
-import bcrypt from 'bcrypt';
+import { MongoClient } from "mongodb";
+import bcrypt from "bcrypt";
 
-const handler = async (req, res) => {
-    if (req.method === 'POST' && req.body.password === req.body.confirmPassword) {
-        // can do addtl user validation before saving user
-        try {
-            bcrypt.genSalt(10, async (err, salt) => {
-                bcrypt.hash(req.body.password, salt, async (err, hash) => {
-                    const user = {
-                        nickname: req.body.nickname,
-                        email: req.body.email,
-                        password: hash
-                    }
+const validateRequest = (nickname, email, pass, confirmPass) => {
+  if (!nickname || !email || !pass || !confirmPass)
+    return "Incomplete request body.";
 
-                    const client = await MongoClient.connect(process.env.MONGO_CONNECT);
-                    const db = client.db();
+  if (pass !== confirmPass) return "Passwords do not match.";
 
-                    const usersCollection = db.collection('users');
+  // check that email is vaguely valid format
+  const emailRegex = /^\S+@\S+\.\S+$/
+  if (!emailRegex.test(email)) return "Invalid email.";
 
-                    const result = await usersCollection.insertOne({user});
+  return null;
+};
 
-                    console.log(result);
-                    client.close();
-                })
-            })
+export default async function handler(req, res) {
+  let client;
 
-            await res.status(201).json({message: 'new user added'});
-            
-        } catch (e) {
-            console.log('error', e);
-        }
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed." });
+  }
 
-    }
+  // validations
+  const { nickname, email, password, confirmPassword } = req.body;
+  const validationError = validateRequest(nickname, email, password, confirmPassword);
 
+  if (validationError) return res.status(400).json({ error: validationError });
+
+  try {
+    client = await MongoClient.connect(process.env.MONGO_CONNECT);
+    const db = client.db();
+
+    const usersCollection = db.collection("users");
+
+    // check that user is not already in database
+    const userDb = await usersCollection.findOne({
+      "user.email": req.body.email,
+    });
+
+    if (userDb) return res.status(400).json({ error: `${email} is an existing user.` });
+
+    // hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // create user in db
+    const newUser = {
+      nickname: nickname,
+      email: email,
+      password: hashedPassword,
+    };
+
+    await usersCollection.insertOne({ newUser });
+
+    return res.status(201).json({ message: "New user added." });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    if (client) client.close();
+  }
 }
-
-export default handler;

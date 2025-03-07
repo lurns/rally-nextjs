@@ -49,7 +49,7 @@ const AddNewMessage = (props) => {
       setLoading(false);
       document.getElementById("messageBody").value = "";
       setSuccess(true);
-      props.setMessages((current) => [data, ...current]);
+      if (props.setMessages) props.setMessages((current) => [data, ...current]);
       props.closeModal ? props.closeModal() : router.push("/dash");
     } else {
       setLoading(false);
