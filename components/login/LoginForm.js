@@ -1,18 +1,21 @@
-import { useRef, useState, useContext } from "react";
-import { useRouter } from "next/router";
+import { useRef, useState, useContext, useEffect } from "react";
+import { useRouter, withRouter } from "next/router";
 import Link from "next/dist/client/link";
 import MessageBanner from "../ui/MessageBanner";
-import { ERROR_MESSAGE } from "../../constants/messageBannerType";
+import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../constants/messageBannerType";
 import { WorkoutContext } from "../../store/workout-context";
 
-const LoginForm = () => {
-  // handle sending data to api/login
+const LoginForm = (props) => {
   const router = useRouter();
   const { getWorkouts } = useContext(WorkoutContext);
   const [updateRespsonse, setUpdateResponse] = useState({});
 
   const emailRef = useRef();
   const passRef = useRef();
+
+    useEffect(() => {
+      if (props?.router?.query?.message) setUpdateResponse({ type: SUCCESS_MESSAGE, message: props.router.query.message })
+    }, [props.router?.query])
 
   const loginHandler = async (event) => {
     event.preventDefault();
@@ -120,4 +123,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default withRouter(LoginForm);

@@ -6,7 +6,7 @@ export async function middleware(req) {
   const res = NextResponse.next();
   const session = await getIronSession(req, res, ironOptions);
 
-  const publicPages = ["/", "/signup", "/api/login"];
+  const publicPages = ["/", "/signup", "/api/signup", "/api/login"];
   if (publicPages.includes(req.nextUrl.pathname)) {
     return res;
   }

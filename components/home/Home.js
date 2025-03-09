@@ -1,3 +1,4 @@
+import { withRouter } from 'next/router';
 import LoginForm from "../../components/login/LoginForm";
 import Image from "next/image";
 
@@ -21,4 +22,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default withRouter(Home);

@@ -1,3 +1,4 @@
+import { withRouter } from 'next/router';
 import Home from '../components/home/Home';
 
 export const HomePage = () => {
@@ -7,4 +8,4 @@ export const HomePage = () => {
   )
 }
 
-export default HomePage;
+export default withRouter(HomePage);
