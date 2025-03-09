@@ -1,54 +1,57 @@
 import { useRef, useState } from "react";
-import { useAuth } from "../../store/auth-context";
 import MessageBanner from "../ui/MessageBanner";
 import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../constants/messageBannerType";
 
 const UpdatePassword = () => {
-	const { auth, user, setUser } = useAuth();
 	const oldPassRef = useRef();
-  	const newPassRef = useRef();
+	const newPassRef = useRef();
 	const confirmNewPassRef = useRef();
 
-	const [error, setError] = useState(false);
-	const [success, setSuccess] = useState(false);
+	const [updateRespsonse, setUpdateResponse] = useState({});
 
 	const submitHandler = async (e) => {
 		e.preventDefault();
 
-		// TODO: validate
 		const passData = {
 			oldPass: oldPassRef.current.value,
 			newPass: newPassRef.current.value,
 			confirmNewPass: confirmNewPassRef.current.value
 		}
 
-		const response = await fetch('/api/update-password', {
-			method: 'PUT',
-			body: JSON.stringify(passData),
-			headers: {
-				'Content-Type': 'application/json'
+		try {
+			if (newPass !== confirmNewPass) throw new Error("Passwords do not match.");
+
+			const response = await fetch('/api/update-password', {
+				method: 'PUT',
+				body: JSON.stringify(passData),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+	
+			const data = await response.json();
+	
+			if (!data.error) {
+				setUpdateResponse({ type: SUCCESS_MESSAGE, message: "Password updated." });
+			} else {
+				setUpdateResponse({ type: ERROR_MESSAGE, message: data.error });
 			}
-		});
-
-		const data = await response.json();
-
-		if (!data.error) {
-			setSuccess(true);
-		} else {
-			setError(true);
+		} catch (e) {
+			console.log(e)
+			setUpdateResponse({ type: ERROR_MESSAGE, message: e.message ?? "Unable to update password." });
+		} finally {
+			// clear input
+			document.getElementById('oldPass').value = '';
+			document.getElementById('newPass').value = '';
+			document.getElementById('confirmNewPass').value = '';
 		}
-
-		// clear input
-		document.getElementById('oldPass').value = '';
-		document.getElementById('newPass').value = '';
-		document.getElementById('confirmNewPass').value = '';
-
 	}
 
 	return (
 		<>
-			{ error && <MessageBanner type={ERROR_MESSAGE} message="Error updating password." />}
-			{ success && <MessageBanner type={SUCCESS_MESSAGE} message="Password updated." /> }
+			{ Object.keys(updateRespsonse).length > 0 && 
+				<MessageBanner type={updateRespsonse.type} message={updateRespsonse.message} />
+			}
 			<form id="updatePassword" className="mt-5" onSubmit={submitHandler}>
 				<div className="flex flex-col">
         			<div className="mb-3">
@@ -64,6 +67,7 @@ const UpdatePassword = () => {
 							name="oldPass"
 							className="form-input border-1 border-slate-300 bg-slate-100 rounded-lg p-2 w-full"
 							ref={oldPassRef}
+							required
 						/>
 					</div>
 					<div className="mb-3">
@@ -79,6 +83,7 @@ const UpdatePassword = () => {
 							name="newPass"
 							className="form-input border-1 border-slate-300 bg-slate-100 rounded-lg p-2 w-full"
 							ref={newPassRef}
+							required
 						/>
 					</div>
 					<div className="mb-3">
@@ -94,6 +99,7 @@ const UpdatePassword = () => {
 							name="confirmNewPass"
 							className="form-input border-1 border-slate-300 bg-slate-100 rounded-lg p-2 w-full"
 							ref={confirmNewPassRef}
+							required
 						/>
 					</div>
 					<div className="mb-3">
@@ -116,12 +122,9 @@ const UpdatePassword = () => {
 						">Save</button>
 					</div>
 				</div>
-
-
 			</form>
 		</>
 	)
-
 }
 
 export default UpdatePassword;

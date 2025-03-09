@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   }
 
   if (!req.body.nickname_input) {
-    return res.status(400).json({ error: "Incomplete request body." });
+    return res.status(400).json({ error: "Invalid nickname." });
   }
 
   try {
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         .status(200)
         .send(JSON.stringify({ success: req.body.nickname_input }));
 
-    return res.status(403).json({ error: "Unable to update nickname." });
+    return res.status(404).json({ error: "Unable to update nickname." });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ error: "Internal Server Error" });

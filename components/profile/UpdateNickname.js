@@ -7,44 +7,48 @@ const UpdateNickname = () => {
 	const { auth, user, setUser } = useAuth();
 	const nicknameRef = useRef();
 
-	const [error, setError] = useState(false);
-	const [success, setSuccess] = useState(false);
+	const [updateRespsonse, setUpdateResponse] = useState({});
 
 	const submitHandler = async (e) => {
 		e.preventDefault();
 
-		const response = await fetch('/api/update-nickname', {
-			method: 'PUT',
-			body: JSON.stringify({nickname_input: nicknameRef.current.value}),
-			headers: {
-				'Content-Type': 'application/json'
+		try {
+			const response = await fetch('/api/update-nickname', {
+				method: 'PUT',
+				body: JSON.stringify({nickname_input: nicknameRef.current.value}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			const data = await response.json();
+
+			if (!data.error) {
+				// update user
+				let updateUser = user;
+				updateUser.user.nickname = data.success;
+
+				setUser({...updateUser});
+
+				// clear input
+				document.getElementById('nickname').value = '';
+
+				// give success msg
+				setUpdateResponse({ type: SUCCESS_MESSAGE, message: "Nickname updated." });
+			} else {
+				setUpdateResponse({ type: ERROR_MESSAGE, message: data.error });
 			}
-		});
-
-		const data = await response.json();
-
-		if (!data.error) {
-			// update user
-			let updateUser = user;
-			updateUser.user.nickname = data.success;
-
-			setUser({...updateUser});
-
-			// clear input
-			document.getElementById('nickname').value = '';
-
-			// give success msg
-			setSuccess(true);
-		} else {
-			setError(true);
+		} catch (e) {
+			console.log(e);
+			setUpdateResponse({ type: ERROR_MESSAGE, message: "Unable to update nickname." });
 		}
-
 	}
 
 	return (
 		<>
-			{ error && <MessageBanner type={ERROR_MESSAGE} message="Error updating nickname." />}
-			{ success && <MessageBanner type={SUCCESS_MESSAGE} message="Nickname updated." /> }
+			{ Object.keys(updateRespsonse).length > 0 && 
+				<MessageBanner type={updateRespsonse.type} message={updateRespsonse.message} />
+			}
 			<form id="updateNickname" className="mt-5" onSubmit={submitHandler}>
 				<div className="flex flex-nowrap">
 					<div className="w-full">

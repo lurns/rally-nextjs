@@ -7,44 +7,48 @@ const UpdateEmail = () => {
 	const { auth, user, setUser } = useAuth();
 	const emailRef = useRef();
 
-	const [error, setError] = useState(false);
-	const [success, setSuccess] = useState(false);
+	const [updateRespsonse, setUpdateResponse] = useState({});
 
 	const submitHandler = async (e) => {
 		e.preventDefault();
 
-		const response = await fetch('/api/update-email', {
-			method: 'PUT',
-			body: JSON.stringify({email_input: emailRef.current.value}),
-			headers: {
-				'Content-Type': 'application/json'
+		try {
+			const response = await fetch('/api/update-email', {
+				method: 'PUT',
+				body: JSON.stringify({email_input: emailRef.current.value}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			const data = await response.json();
+
+			if (!data.error) {
+				// update user
+				let updateUser = user;
+				updateUser.user.email = data.success;
+
+				setUser({...updateUser});
+
+				// clear input
+				document.getElementById('email').value = '';
+
+				// give success msg
+				setUpdateResponse({ type: SUCCESS_MESSAGE, message: "Email updated." });
+			} else {
+				setUpdateResponse({ type: ERROR_MESSAGE, message: data.error });
 			}
-		});
-
-		const data = await response.json();
-
-		if (!data.error) {
-			// update user
-			let updateUser = user;
-			updateUser.user.email = data.success;
-
-			setUser({...updateUser});
-
-			// clear input
-			document.getElementById('email').value = '';
-
-			// give success msg
-			setSuccess(true);
-		} else {
-			setError(true);
+		} catch (e) {
+			console.log(e);
+			setUpdateResponse({ type: ERROR_MESSAGE, message: "Unable to update email." });
 		}
-
 	}
 
 	return (
 		<>
-			{ error && <MessageBanner type={ERROR_MESSAGE} message="Error updating email." />}
-			{ success && <MessageBanner type={SUCCESS_MESSAGE} message="Email updated." /> }
+			{ Object.keys(updateRespsonse).length > 0 && 
+				<MessageBanner type={updateRespsonse.type} message={updateRespsonse.message} />
+			}
 			<form id="updateEmail" className="mt-5" onSubmit={submitHandler}>
 				<div className="flex flex-nowrap">
 					<div className="w-full">

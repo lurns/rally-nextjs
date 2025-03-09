@@ -6,12 +6,14 @@ export default async function handler(req, res) {
   const session = await getIronSession(req, res, ironOptions);
   let client;
 
+  const emailRegex = /^\S+@\S+\.\S+$/
+
   if (req.method !== "PUT") {
     return res.status(405).json({ error: "Method not allowed." });
   }
 
-  if (!req.body.email_input) {
-    return res.status(400).json({ error: "Incomplete request body." });
+  if (!req.body.email_input || !emailRegex.test(req.body.email_input)) {
+    return res.status(400).json({ error: "Invalid email address." });
   }
 
   try {
