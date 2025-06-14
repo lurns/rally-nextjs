@@ -13,9 +13,9 @@ const LoginForm = (props) => {
   const emailRef = useRef();
   const passRef = useRef();
 
-    useEffect(() => {
-      if (props?.router?.query?.message) setUpdateResponse({ type: SUCCESS_MESSAGE, message: props.router.query.message })
-    }, [props.router?.query])
+  useEffect(() => {
+    if (props?.router?.query?.message) setUpdateResponse({ type: SUCCESS_MESSAGE, message: props.router.query.message })
+  }, [props.router?.query])
 
   const loginHandler = async (event) => {
     event.preventDefault();

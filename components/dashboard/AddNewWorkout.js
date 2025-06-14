@@ -3,98 +3,109 @@ import { useAuth } from "../../store/auth-context";
 import MessageBanner from "../ui/MessageBanner";
 import { useRouter } from "next/router";
 import { WorkoutContext } from "../../store/workout-context";
-import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../constants/messageBannerType";
+import {
+  ERROR_MESSAGE,
+  SUCCESS_MESSAGE,
+} from "../../constants/messageBannerType";
 
 const AddNewWorkout = (props) => {
-	const [error, setError] = useState(false);
-	const [success, setSuccess] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const { workouts, setWorkouts } = useContext(WorkoutContext);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { workouts, setWorkouts } = useContext(WorkoutContext);
 
-	const { auth, user, setUser } = useAuth();
-	const router = useRouter();
-    const workoutTypeRef = useRef();
-    const workoutDurationRef = useRef();
+  const { auth, user, setUser } = useAuth();
+  const router = useRouter();
+  const workoutTypeRef = useRef();
+  const workoutDurationRef = useRef();
 
-    const submitWorkoutHandler = async (event) => {
-        event.preventDefault();
-		setLoading(true);
+  const submitWorkoutHandler = async (event) => {
+    event.preventDefault();
+    setLoading(true);
 
-		// TODO: error handling
+    // TODO: error handling
 
-        const workoutData = {
-            workout_type: workoutTypeRef.current.value,
-            duration: workoutDurationRef.current.value,
-			user_id: user._id,
-        }
+    const workoutData = {
+      workout_type: workoutTypeRef.current.value,
+      duration: workoutDurationRef.current.value,
+      user_id: user._id,
+    };
 
-		const response = await fetch('/api/new-workout', {
-			method: 'POST',
-			body: JSON.stringify(workoutData),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-			});
-	
-			const data = await response.json();
-	
-			if (!data.error) {
-				// clear fields, give success msg
-				setLoading(false);
-				document.getElementById('workoutType').value = '';
-				document.getElementById('workoutDuration').value = 1;
-				document.getElementById('rangeDuration').value = '';
-				setSuccess(true);
+    const response = await fetch("/api/new-workout", {
+      method: "POST",
+      body: JSON.stringify(workoutData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-				// update workouts, add newest to beginning
-				setWorkouts((current) => [data, ...current]);
+    const data = await response.json();
 
-				props.closeModal ? props.closeModal() : router.push('/dash');  
+    if (!data.error) {
+      // clear fields, give success msg
+      setLoading(false);
+      document.getElementById("workoutType").value = "";
+      document.getElementById("workoutDuration").value = 1;
+      document.getElementById("rangeDuration").value = "";
+      setSuccess(true);
 
-			} else {
-				setLoading(false);
-				setError(true);
-			}
+      // update workouts, add newest to beginning
+      setWorkouts((current) => [data, ...current]);
+
+      props.closeModal ? props.closeModal() : router.push("/dash");
+    } else {
+      setLoading(false);
+      setError(true);
     }
+  };
 
-	const displayWorkoutDuration = () => {
-		const output = document.getElementById('rangeDuration');
-		output.innerHTML = workoutDurationRef.current.value > 1 ? workoutDurationRef.current.value + ' minutes' : workoutDurationRef.current.value + ' minute' 
-	}
+  const displayWorkoutDuration = () => {
+    const output = document.getElementById("rangeDuration");
+    output.innerHTML =
+      workoutDurationRef.current.value > 1
+        ? workoutDurationRef.current.value + " minutes"
+        : workoutDurationRef.current.value + " minute";
+  };
 
-	return (
-		<div>
-			<h3 className="font-black text-3xl text-sky-900">
-				Add New Workout
-			</h3>
-			{error && !loading ? <MessageBanner type={ERROR_MESSAGE} message="Error adding workout" /> : ''}
-			{success && !loading ? <MessageBanner type={SUCCESS_MESSAGE} message="Workout added!" /> : ''}
-			<form id="addNewWorkoutForm" className="mt-5" onSubmit={submitWorkoutHandler}>
-			<div className="flex flex-col mb-3">
-				<label 
-					htmlFor="workoutType"
-					className="text-left text-slate-500"
-				>Workout Type
-				</label>
-				<input 
-					type="text"
-					name="workoutType"
-					id="workoutType"
-					className="form-input border-1 border-slate-300 bg-slate-100 rounded-lg p-2"
-					ref={workoutTypeRef}
-					required
-				/>
-			</div>
-			<div className="flex flex-col mb-3">
-				<label 
-					htmlFor="workoutDuration"
-					className="text-slate-500"
-				>Duration
-				</label>
-				<div>
-					<input
-						type="range"
-						className="
+  return (
+    <div>
+      <h3 className="font-black text-3xl text-sky-900">Add New Workout</h3>
+      {error && !loading ? (
+        <MessageBanner type={ERROR_MESSAGE} message="Error adding workout" />
+      ) : (
+        ""
+      )}
+      {success && !loading ? (
+        <MessageBanner type={SUCCESS_MESSAGE} message="Workout added!" />
+      ) : (
+        ""
+      )}
+      <form
+        id="addNewWorkoutForm"
+        className="mt-5"
+        onSubmit={submitWorkoutHandler}
+      >
+        <div className="flex flex-col mb-3">
+          <label htmlFor="workoutType" className="text-left text-slate-500">
+            Workout Type
+          </label>
+          <input
+            type="text"
+            name="workoutType"
+            id="workoutType"
+            className="form-input border-1 border-slate-300 bg-slate-100 rounded-lg p-2"
+            ref={workoutTypeRef}
+            required
+          />
+        </div>
+        <div className="flex flex-col mb-3">
+          <label htmlFor="workoutDuration" className="text-slate-500">
+            Duration
+          </label>
+          <div>
+            <input
+              type="range"
+              className="
 							form-range 
 							appearance-none 
 							w-full 
@@ -107,26 +118,27 @@ const AddNewWorkout = (props) => {
 							rounded-lg
 							accent-(--color-slate-600)
 						"
-						id="workoutDuration"
-						name="workoutDuration"
-						ref={workoutDurationRef}
-						onChange={displayWorkoutDuration}
-						min="1"
-						max="90"
-						defaultValue="1"
-						required
-					/>
-					<output id="rangeDuration" className="font-black text-1xl pt-5 text-slate-600">
-						
-					</output>
-				</div>
-			</div>
+              id="workoutDuration"
+              name="workoutDuration"
+              ref={workoutDurationRef}
+              onChange={displayWorkoutDuration}
+              min="1"
+              max="90"
+              defaultValue="1"
+              required
+            />
+            <output
+              id="rangeDuration"
+              className="font-black text-1xl pt-5 text-slate-600"
+            ></output>
+          </div>
+        </div>
 
-				
-			<div className="flex flex-col mb-3">
-				<button id="submitWorkoutButton"
-					type="submit" 
-					className="
+        <div className="flex flex-col mb-3">
+          <button
+            id="submitWorkoutButton"
+            type="submit"
+            className="
 						min-w-full 
 						mt-5 
 						p-4 
@@ -141,15 +153,14 @@ const AddNewWorkout = (props) => {
 						shadow-lg
 						disabled:bg-slate-400
 					"
-					disabled={loading ? true : false}
-				>
-					Add New Workout
-				</button>
-			</div>
-
-			</form>
-		</div>
-  )
-}
+            disabled={loading ? true : false}
+          >
+            Add New Workout
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export default AddNewWorkout;
