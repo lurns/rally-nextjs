@@ -25,42 +25,50 @@ const AddNewMessage = (props) => {
     event.preventDefault();
     setLoading(true);
 
-    // TODO: error handling
+    try {
+      const messageData = {
+        message_body: messageBodyRef.current.value,
+        message_type: messageTypeRef.current.value,
+        user_id: user._id,
+      };
 
-    const messageData = {
-      message_body: messageBodyRef.current.value,
-      message_type: messageTypeRef.current.value,
-      user_id: user._id,
-    };
+      if (!messageData.user_id)
+        throw new Error("You need to login to save a message.")
 
-    const response = await fetch("/api/new-message", {
-      method: "POST",
-      body: JSON.stringify(messageData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await response.json();
-    console.log(data);
-
-    if (!data.error) {
-      // clear fields, give success msg
+      if (!messageData.message_body || !messageData.message_type || messageData.message_body.trim() === '')
+        throw new Error("Message type and body required.");
+  
+      const response = await fetch("/api/new-message", {
+        method: "POST",
+        body: JSON.stringify(messageData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      const data = await response.json();
+  
+      if (!data.error) {
+        // clear fields, give success msg
+        setLoading(false);
+        document.getElementById("messageBody").value = "";
+        setSuccess(true);
+        if (props.setMessages) props.setMessages((current) => [data, ...current]);
+        props.closeModal ? props.closeModal() : router.push("/dash");
+      } else {
+        setLoading(false);
+        setError(true);
+      }
+    } catch (e) {
       setLoading(false);
-      document.getElementById("messageBody").value = "";
-      setSuccess(true);
-      if (props.setMessages) props.setMessages((current) => [data, ...current]);
-      props.closeModal ? props.closeModal() : router.push("/dash");
-    } else {
-      setLoading(false);
-      setError(true);
+      setError(e.message);
     }
   };
 
   return (
     <div>
       <h3 className="font-black text-3xl text-sky-900">Add New Message</h3>
-      {error && !loading ? <MessageBanner type={ERROR_MESSAGE} message="Error adding message" /> : ""}
+      {error && !loading ? <MessageBanner type={ERROR_MESSAGE} message={error ?? "Error adding message"} /> : ""}
       {success && !loading ? <MessageBanner type={SUCCESS_MESSAGE} message="Message added!" /> : ""}
       <form
         id="addNewMessageForm"

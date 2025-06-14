@@ -23,40 +23,54 @@ const AddNewWorkout = (props) => {
     event.preventDefault();
     setLoading(true);
 
-    // TODO: error handling
+    try {
+			const workoutData = {
+				workout_type: workoutTypeRef.current.value,
+				duration: workoutDurationRef.current.value,
+				user_id: user._id,
+			};
 
-    const workoutData = {
-      workout_type: workoutTypeRef.current.value,
-      duration: workoutDurationRef.current.value,
-      user_id: user._id,
-    };
+			console.log(workoutData)
 
-    const response = await fetch("/api/new-workout", {
-      method: "POST",
-      body: JSON.stringify(workoutData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+			if (!workoutData.user_id)
+        throw new Error("You need to login to save a workout")
 
-    const data = await response.json();
+      if (!workoutData.workout_type || !workoutData.duration)
+        throw new Error("Workout type and duration required.");
 
-    if (!data.error) {
-      // clear fields, give success msg
+			if (workoutData.duration < 1)
+				throw new Error("You gotta work out for at least a minute...")
+
+			const response = await fetch("/api/new-workout", {
+				method: "POST",
+				body: JSON.stringify(workoutData),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			const data = await response.json();
+
+			if (!data.error) {
+				// clear fields, give success msg
+				setLoading(false);
+				document.getElementById("workoutType").value = "";
+				document.getElementById("workoutDuration").value = 1;
+				document.getElementById("rangeDuration").value = "";
+				setSuccess(true);
+
+				// update workouts, add newest to beginning
+				setWorkouts((current) => [data, ...current]);
+
+				props.closeModal ? props.closeModal() : router.push("/dash");
+			} else {
+				setLoading(false);
+				setError(true);
+			}
+		} catch (e) {
       setLoading(false);
-      document.getElementById("workoutType").value = "";
-      document.getElementById("workoutDuration").value = 1;
-      document.getElementById("rangeDuration").value = "";
-      setSuccess(true);
-
-      // update workouts, add newest to beginning
-      setWorkouts((current) => [data, ...current]);
-
-      props.closeModal ? props.closeModal() : router.push("/dash");
-    } else {
-      setLoading(false);
-      setError(true);
-    }
+      setError(e.message);
+		}
   };
 
   const displayWorkoutDuration = () => {
@@ -71,7 +85,7 @@ const AddNewWorkout = (props) => {
     <div>
       <h3 className="font-black text-3xl text-sky-900">Add New Workout</h3>
       {error && !loading ? (
-        <MessageBanner type={ERROR_MESSAGE} message="Error adding workout" />
+        <MessageBanner type={ERROR_MESSAGE} message={error ?? "Error adding workout"} />
       ) : (
         ""
       )}
