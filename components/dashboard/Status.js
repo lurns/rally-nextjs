@@ -8,6 +8,7 @@ import { DateTime } from "luxon";
 import { server } from "../../lib/config";
 import MessageBanner from "../ui/MessageBanner";
 import { ERROR_MESSAGE } from "../../constants/messageBannerType";
+import { DO_BETTER_ER, MessageType } from "../../constants/messageType";
 
 const timePassed = (lastWorkout) => {
 	const currentDate = DateTime.fromJSDate(new Date());
@@ -36,13 +37,14 @@ const fetchMessage = async (messageType) => {
 
 const Status = () => {
 	const { auth, user, setUser } = useAuth();
-	const { workouts } = useContext(WorkoutContext);
+	const { workouts, getWorkouts } = useContext(WorkoutContext);
 	const [message, setMessage] = useState('');
 	const [error, setError] = useState('');
 
 	useEffect(() => {
 		if (localStorage.getItem('rally_storage') !== '') {
 			setUser(JSON.parse(localStorage.getItem('rally_storage')));
+			getWorkouts();
 		}
 	}, [auth, setUser]);
 
@@ -83,7 +85,7 @@ const Status = () => {
 				Hey, { user?.user?.nickname }!
 			</h3>
 			{ error && <MessageBanner type={ERROR_MESSAGE} message={error} />}
-			<MessageBubble message={message?.message ?? ''} />
+			<MessageBubble message={message?.message ?? MessageType[DO_BETTER_ER]} />
 			<UserPic />
 			<UploadNewPic />
 		</div>
