@@ -17,7 +17,7 @@ const Profile = () => {
 
     return (
       <div className="flex bg-slate-700">
-        <div className="flex mx-auto h-screen bg-slate-200 w-3/4 p-3">
+        <div className="flex mx-auto bg-slate-200 w-3/4 p-3">
           <div className="m-2">
 						<h3 className="font-black text-4xl text-yellow-500 bg-yellow-900 w-fit p-2">
 							Update Profile Picture

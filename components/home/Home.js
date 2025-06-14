@@ -4,8 +4,8 @@ import Image from "next/image";
 
 const Home = () => {
   return (
-    <div className="flex md:h-screen bg-purple-200 pb-5 pt-5">
-      <div className="md:flex sm:flex-wrap-reverse mx-auto bg-slate-600 self-center p-10 rounded-2xl shadow-lg">
+    <div className="min-h-screen bg-purple-200 pt-20 md:pb-8">
+      <div className="md:flex w-fit mx-auto bg-slate-600 p-6 md:p-10 rounded-2xl shadow-lg">
         <div className="flex-1">
           <Image
             alt="Motivate yourself!"
