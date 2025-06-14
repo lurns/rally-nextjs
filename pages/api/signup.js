@@ -45,13 +45,13 @@ export default async function handler(req, res) {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // create user in db
-    const newUser = {
+    const user = {
       nickname: nickname,
       email: email,
       password: hashedPassword,
     };
 
-    await usersCollection.insertOne({ newUser });
+    await usersCollection.insertOne({ user });
 
     return res.status(201).json({ message: "New user added." });
   } catch (e) {
