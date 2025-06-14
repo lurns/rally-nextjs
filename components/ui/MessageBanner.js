@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "material-icons/iconfont/material-icons.css";
 import { ERROR_MESSAGE, INFO_MESSAGE, SUCCESS_MESSAGE } from "../../constants/messageBannerType";
 
@@ -21,6 +21,8 @@ export const MessageBanner = (props) => {
       bgColor = 'bg-blue-500';
       heading = 'Heads up!';
   }
+
+  useEffect(() => setVisible(true), [props]);
 
   return (
     <>
