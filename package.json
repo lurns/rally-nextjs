@@ -10,28 +10,28 @@
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/postcss": "^4.0.6",
-    "@tailwindcss/vite": "^4.0.6",
-    "bcrypt": "^5.1.1",
-    "cloudinary": "^2.5.1",
-    "dotenv": "^16.4.7",
+    "@tailwindcss/postcss": "^4.1.10",
+    "@tailwindcss/vite": "^4.1.10",
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.6.1",
+    "dotenv": "^16.5.0",
     "iron-session": "^8.0.4",
-    "luxon": "^3.5.0",
+    "luxon": "^3.6.1",
     "material-icons": "^1.13.14",
-    "mongodb": "^6.13.0",
-    "next": "^15.1.7",
+    "mongodb": "^6.17.0",
+    "next": "^15.3.3",
     "node-fetch": "^3.3.2",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "swr": "^2.3.2"
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "swr": "^2.3.3"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.9.4",
-    "@nuxtjs/tailwindcss": "^6.13.1",
-    "autoprefixer": "^10.4.20",
-    "eslint": "9.20.1",
-    "eslint-config-next": "15.1.7",
-    "postcss": "^8.5.2",
-    "tailwindcss": "^4.0.6"
+    "@netlify/plugin-nextjs": "^5.11.2",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "9.29.0",
+    "eslint-config-next": "15.3.3",
+    "postcss": "^8.5.5",
+    "tailwindcss": "^4.1.10"
   }
 }
