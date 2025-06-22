@@ -3,15 +3,37 @@ import { useRouter } from "next/router";
 import Link from "next/dist/client/link";
 import MessageBanner from "../ui/MessageBanner";
 import { ERROR_MESSAGE } from "../../constants/messageBannerType";
+import Recaptcha from "../recaptcha/Recaptcha";
 
 const Signup = () => {
   const router = useRouter();
   const [updateRespsonse, setUpdateResponse] = useState({});
+  const [captchaSuccessful, setCaptchaSuccessful] = useState(false);
 
   const nicknameRef = useRef();
   const emailRef = useRef();
   const passRef = useRef();
   const confirmPassRef = useRef();
+
+  // verify captcha
+  const handleRecaptchaVerify = async (token) => {
+    try {
+      const response = await fetch("/api/verify-recaptcha", {
+        method: "POST",
+        body: JSON.stringify({token}),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (data?.success) setCaptchaSuccessful(true)
+
+    } catch (e) {
+      console.log('Recaptcha failed', e);
+    }
+  };
 
   const newUserHandler = async (event) => {
     event.preventDefault();
@@ -26,6 +48,9 @@ const Signup = () => {
     try {
       if (newUserData.password !== newUserData.confirmPassword)
         throw new Error("Passwords do not match.");
+
+      if (!captchaSuccessful)
+        throw new Error("Recaptcha failed.");
 
       const response = await fetch("/api/signup", {
         method: "POST",
@@ -49,7 +74,7 @@ const Signup = () => {
       console.log(e);
       setUpdateResponse({
         type: ERROR_MESSAGE,
-        message: e.message ?? "Unable to update password.",
+        message: e.message ?? "Unable to create a new user.",
       });
     } finally {
       document.getElementById("rallyPass").value = "";
@@ -58,7 +83,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="h-screen bg-blue-200 p-10">
+    <div className="min-h-screen bg-blue-200 p-10">
       <div className="container mx-auto max-w-xl bg-white self-center p-10 rounded-2xl shadow-lg">
         <h2 className="text-left font-black text-6xl text-purple-500">
           Sign up
@@ -138,6 +163,7 @@ const Signup = () => {
             />
           </div>
           <div className="flex flex-col mb-3">
+            <Recaptcha onVerify={handleRecaptchaVerify} action='signup' />
             <button
               type="submit"
               className="
